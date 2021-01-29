@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-// import data from '../data';
 import axios from 'axios';
+import { capitalize, DisplayMessage } from '../utils/functions_for_components';
 
 export default class AddBirthday extends Component {
     constructor(props){
         super(props);
-
+        this.isLoggedIn = localStorage.getItem('isLoggedIn');
+        
         this.onChangeName = this.onChangeName.bind(this);
         this.onChangeDate = this.onChangeDate.bind(this);
         this.onChangeGender = this.onChangeGender.bind(this);
@@ -13,6 +14,8 @@ export default class AddBirthday extends Component {
         this.onSubmit = this.onSubmit.bind(this);
 
         this.state = {
+            className: "",
+            message: "",
             name: "",
             age: 0,
             gender: 'Male',
@@ -21,17 +24,26 @@ export default class AddBirthday extends Component {
             month: 0,
             year: 0,
             isBirthday: false,
-            image: ''
+            imageValue: '',
+            image: '',
+            isLoggedIn: this.isLoggedIn
         };
     }
-    // callAPI(){
-    //     fetch("http://localhost:9000/testAPI")
-    //         .then(res => res.text())
-    //         .then(res => this.setState({apiResponse: res}));
-    // }
-    // componentWillMount(){
-    //     this.callAPI();
-    // }
+    componentDidUpdate(){
+        if(this.state.className !== ''){
+            setTimeout(() => {
+                this.setState({
+                    className: '',
+                    message: '',
+                    name: '',
+                    date: '',
+                    image: '',
+                    isBirthday: false,
+                    imageValue: ''
+                });
+            }, 2000);
+        }
+    }
     onChangeName(e){
         this.setState({
             name: e.target.value
@@ -41,7 +53,6 @@ export default class AddBirthday extends Component {
         this.setState({
             gender: e.target.value
         });
-        console.log(e.target.value);
     }
     onChangeDate(e){
         const dob = new Date(e.target.value);
@@ -59,7 +70,6 @@ export default class AddBirthday extends Component {
         if(!((currentMonth>=birthMonth) && (currentDate>=birthDate))){
             yearAge--;
         }
-        console.log(yearAge);
         this.setState({
             age: yearAge,
             date: e.target.value,
@@ -79,108 +89,104 @@ export default class AddBirthday extends Component {
     }
     onChangeImage(e){
         this.setState({
+            imageValue: e.target.value,
             image: e.target.files[0]
         })
     }
-    // onChangeImage(e){
-    //     let imgFormObj = new FormData();
-
-    //     imgFormObj.append("imageName", "multer-image-"+Date.now());
-    //     imgFormObj.append("imageData", e.target.files[0]);
-    //     // imgFormObj.append("imageData", e.target.files[0]);
-
-    //     this.setState({
-    //         image: URL.createObjectURL(e.target.files[0])
-    //     });
-    //     console.log(e.target.files[0]);
-    //     console.log(imgFormObj);
-        
-    //     axios.post('http://localhost:4000/days/uploadmulter', imgFormObj)
-    //         .then(data => {
-    //             if(data.data.success){
-    //                 alert("Image Added");
-    //             }
-    //         }).catch(err => console.log(err))
-    // }
-    capitalize(str){
-        return str.charAt(0).toUpperCase() + str.slice(1);
+    loading(){
+        this.setState({
+            className: 'displayMessage',
+            message: 'Loading..'
+        })
     }
     onSubmit(e){
         e.preventDefault();
-        const birthdays = new FormData();
-        birthdays.append('name', this.capitalize(this.state.name));
-        birthdays.append('age', this.state.age);
-        birthdays.append('gender', this.state.gender);
-        birthdays.append('date', this.state.birthDate);
-        birthdays.append('month', this.state.month);
-        birthdays.append('year', this.state.year);
-        birthdays.append('isBirthday', this.state.isBirthday);
-        birthdays.append('image', this.state.image);
-        // const birthdays = {
-        //     name: this.capitalize(this.state.name),
-        //     age: this.state.age,
-        //     gender: this.state.gender,
-        //     date: this.state.birthDate,
-        //     month: this.state.month,
-        //     year: this.state.year,
-        //     isBirthday: this.state.isBirthday,
-        //     image: this.state.image
-        // }
-        console.log(birthdays);
-
-        axios.post('http://localhost:4000/days/add', birthdays)
-            .then(res => console.log(res.data));
-        // window.location = '/';
-        this.setState({
-            name: '',
-            isBirthday: '',
-            date: ''
-        });
+        this.loading();
+        if(this.isLoggedIn){
+            const birthdays = new FormData();
+            birthdays.append('name', capitalize(this.state.name));
+            birthdays.append('age', this.state.age);
+            birthdays.append('gender', this.state.gender);
+            birthdays.append('date', this.state.birthDate);
+            birthdays.append('month', this.state.month);
+            birthdays.append('year', this.state.year);
+            birthdays.append('isBirthday', this.state.isBirthday);
+            birthdays.append('image', this.state.image);
+            axios.post('http://localhost:4000/days/add', birthdays)
+                .then(res => {
+                    this.setState({
+                        className: 'displayMessage',
+                        message: res.data.message
+                    });
+                }).catch(err => {
+                    this.setState({
+                        className: 'displayMessage',
+                        message: err
+                    });
+                });
+        } else {            
+            this.setState({
+                className: 'displayMessage',
+                message: `Login or Register!!`
+            });
+        }
     }
 
     render() {
         return (
             <div className="main-container">
-                <form onSubmit={this.onSubmit} className="container">
+                <div className='container'>
+                    <div className='messageContainer'>
+                        <DisplayMessage className={`hideMessage ${this.state.className}`} key={Date.now()+'something'} message={this.state.message}/>
+                    </div>
                     <h3>Enter Details</h3>
-                    <button onClick={() => {window.location = '/'}} id="back-btn">Back</button>
-                    <div className="form-group">
-                        <label>Name: </label>
-                        <input type="text"
-                        required
-                        placeholder="Enter Name"
-                        className="input"
-                        value={this.state.name}
-                        onChange={this.onChangeName}/>
-                    </div>
-                    <div className="form-group">
-                        <label>Gender: </label>
-                        <select className="input" onChange={this.onChangeGender}>
-                            <option value="Male">Male</option>
-                            <option value="Female">Female</option>
-                        </select>
-                    </div>
-                    <div className="form-group">
-                        <label>Date:</label>
-                        <input type="date"
-                        required
-                        className="input"
-                        value={this.state.date}
-                        onChange={this.onChangeDate}
-                        />
-                    </div>
-                    <div className="form-group">
-                        <label>Image:</label>
-                        <input type="file"
-                        onChange={this.onChangeImage}
-                        />
-                    </div>
-                    <div className="form-group">
-                        <input type='submit' value="Add Birthday" className="btn btn-primary"/>
-                        {/* <input type='submit' value="Upload" className="btn btn-primary"/> */}
-                        {/* <input type='image' value={this.state.image} alt={this.state.name} /> */}
-                    </div>
-                </form>
+                    <button onClick={() => {window.location.href = '/'}} id="backBtn">Back</button>
+                    <form onSubmit={this.onSubmit}>
+
+
+                        <div className="form-group">
+                            <label>Name: </label>
+                            <input type="text"
+                            required
+                            placeholder="Enter Name"
+                            className="input"
+                            value={this.state.name}
+                            onChange={this.onChangeName}/>
+                        </div>
+
+                        <div className="form-group">
+                            <label>Gender: </label>
+                            <select className="input" onChange={this.onChangeGender}>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                            </select>
+                        </div>
+
+                        <div className="form-group">
+                            <label>Date:</label>
+                            <input type="date"
+                            required
+                            className="input"
+                            value={this.state.date}
+                            onChange={this.onChangeDate}
+                            />
+                        </div>
+
+                        <div className="form-group">
+                            <label>Image:</label>
+                            <input type="file"
+                            className="input"
+                            value={this.state.imageValue}
+                            onChange={this.onChangeImage}
+                            />
+                        </div>
+
+                        <div className="form-group">
+                            <input type='submit' value="Add Birthday" className="btn btn-primary"/>
+                        </div>
+
+                    </form>
+                </div>
             </div>
         );
     }

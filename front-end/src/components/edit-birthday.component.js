@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import List from '../DisplayList';
+import List, { capitalize, DisplayMessage } from '../utils/functions_for_components';
 
 export default class EditBirthday extends Component {
     constructor(props){
         super(props);
+        this.isLoggedIn = localStorage.getItem('isLoggedIn');
+
         this.id = props.location.state;
         this.state = {
             oldEntries: {
@@ -16,9 +18,10 @@ export default class EditBirthday extends Component {
                 month: 0,
                 year: 0,
                 isBirthday: false,
-                image: '',
-                display: ""
+                image: ''
             },
+            className: "",
+            message: "",
             name: "",
             age: 0,
             gender: 'Male',
@@ -27,9 +30,9 @@ export default class EditBirthday extends Component {
             month: 0,
             year: 0,
             isBirthday: false,
-            image: ''
+            image: '',
+            display: "hideComponent"
         };
-        
         
         this.onChangeName = this.onChangeName.bind(this);
         this.onChangeDate = this.onChangeDate.bind(this);
@@ -50,14 +53,13 @@ export default class EditBirthday extends Component {
                         month: res.data.month,
                         year: res.data.year,
                         isBirthday: res.data.isBirthday,
-                        image: res.data.image,
-                        display: "hideBtn"
+                        image: res.data.image
                     },
                 });
             });
     }
     displayLastEntry(){
-        return <List bd={this.state.oldEntries} key={this.state.oldEntries.id} />;
+        return <List bd={this.state.oldEntries} isLoggedIn={this.isLoggedIn} id={this.state.display} key={this.state.oldEntries.id} />;
     }
     onChangeName(e){
         this.setState({
@@ -65,7 +67,6 @@ export default class EditBirthday extends Component {
         });
     }
     onChangeGender(e){
-        console.log(e.target.value);
         this.setState({
             gender: e.target.value
         });
@@ -86,7 +87,6 @@ export default class EditBirthday extends Component {
         if(!((currentMonth>=birthMonth) && (currentDate>=birthDate))){
             yearAge--;
         }
-        console.log(yearAge);
         this.setState({
             age: yearAge,
             date: e.target.value,
@@ -109,13 +109,17 @@ export default class EditBirthday extends Component {
             image: e.target.files[0]
         })
     }
-    capitalize(str){
-        return str.charAt(0).toUpperCase() + str.slice(1);
+    loading(){
+        this.setState({
+            className: 'displayMessage',
+            message: 'Loading..'
+        })
     }
     onSubmit(e){
         e.preventDefault();
+        this.loading();
         const birthdays = new FormData();
-        birthdays.append('name', this.capitalize(this.state.name));
+        birthdays.append('name', capitalize(this.state.name));
         birthdays.append('age', this.state.age);
         birthdays.append('gender', this.state.gender);
         birthdays.append('date', this.state.birthDate);
@@ -123,22 +127,14 @@ export default class EditBirthday extends Component {
         birthdays.append('year', this.state.year);
         birthdays.append('isBirthday', this.state.isBirthday);
         birthdays.append('image', this.state.image);
-        // const birthdays = {
-        //     name: this.capitalize(this.state.name),
-        //     age: this.state.age,
-        //     gender: this.state.gender,
-        //     date: this.state.birthDate,
-        //     month: this.state.month,
-        //     year: this.state.year,
-        //     isBirthday: this.state.isBirthday
-        // }
-        if(birthdays.name === ''){
-            birthdays.set("name", this.state.oldEntries.name);
+        if(birthdays.get('name') === ''){
+            console.log('sa')
+            birthdays.set('name', capitalize(this.state.oldEntries.name));
         }
-        if(birthdays.gender===''){
+        if(birthdays.get('gender')===''){
             birthdays.set('gender', this.state.oldEntries.gender);
         }
-        if(birthdays.date === 0){
+        if(birthdays.get('date') === 0){
             e = {"target":{"value": this.state.date}};
             this.onChangeDate(e)
             birthdays.set('age', this.state.oldEntries.age);
@@ -147,38 +143,47 @@ export default class EditBirthday extends Component {
             birthdays.set('year', this.state.oldEntries.year);
             birthdays.set('isBirthday', this.state.isBirthday);
         }
-        if(birthdays.image === undefined){
+        if(birthdays.get('image') === ''){
             birthdays.append('imagePath', this.state.oldEntries.image);
         }
-        
-        console.log(birthdays.image);
-
+        console.log(...birthdays)
         axios.post('http://localhost:4000/days/update/'+this.id, birthdays)
-            .then(res => console.log(res.data));
-        window.location = '/';
-        this.setState({
-            name: '',
-            gender: '',
-            date: ''
-        });
+            .then(res => {
+                this.setState({
+                    className: 'displayMessage',
+                    message: res.data.message
+                });
+            });
+        setTimeout(() => {
+            window.location.href = '/';
+            this.setState({
+                className: '',
+                message: ''
+            })
+        }, 5000);
     }
 
     render() {
         return (
             <div className="main-container">
+                <DisplayMessage className={`hideMessage ${this.state.className}`} key={Date.now()+this.state.oldEntries.id} message={this.state.message}/>
                 <form onSubmit={this.onSubmit} className="container">
                     <h3>Enter Details</h3>
-                    <button onClick={() => {window.location = '/'}} id="back-btn">Back</button>
-                    {this.displayLastEntry()}
-                    <p> Change Any Field. </p>
+                    <button onClick={() => {window.location = '/'}} id="backBtn">Back</button>
+                    <div className='lastEntry'>
+                        {this.displayLastEntry()}
+                    </div>
+                    <h4> Change Any Field. </h4>
+
                     <div className="form-group">
                         <label>Name: </label>
                         <input type="text"
                         placeholder={this.state.oldEntries.name}
-                        className="form-control"
+                        className="input"
                         value={this.state.name}
                         onChange={this.onChangeName}/>
                     </div>
+
                     <div className="form-group">
                         <label>Gender: </label>
                         <select className="input" value={this.state.gender} onChange={this.onChangeGender}>
@@ -186,6 +191,7 @@ export default class EditBirthday extends Component {
                             <option value="Female">Female</option>
                         </select>
                     </div>
+
                     <div className="form-group">
                         <label>Date:</label>
                         <input type="date"
@@ -194,15 +200,19 @@ export default class EditBirthday extends Component {
                         onChange={this.onChangeDate}
                         />
                     </div>
+
                     <div className="form-group">
                         <label>Image:</label>
                         <input type="file"
+                        className='input'
                         onChange={this.onChangeImage}
                         />
                     </div>
+
                     <div className="form-group">
                         <input type='submit' value="Edit Birthday" className="btn btn-primary"/>
                     </div>
+
                 </form>
             </div>
         );

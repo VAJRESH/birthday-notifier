@@ -1,8 +1,8 @@
 const express = require('express');
 let router = express.Router();
 const axios = require('axios');
-// const path = require('path');
 
+//TODO cron job, reminder message
 function reminderMessage(data){
     const textArray = [`Hope your remember today is ${data.date} ${data.month}, ${data.name}'s Birthday. Don't forget to wish.`]
     return textArray[0];
@@ -31,14 +31,9 @@ function checkAndMail(){
             });
         })
         .catch(err => console.log(err));
-
 }
 
 
-// router.route('/mail').post((req, res) => {
-    
-// });
-// checkAndMail();
+checkAndMail();
 
-// module.exports = router;
 

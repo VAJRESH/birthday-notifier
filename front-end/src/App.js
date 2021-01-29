@@ -5,6 +5,8 @@ import DisplayList from './components/show-birthday-list.component';
 import AddBirthday from './components/add-birthday.component';
 import EditBirthday from './components/edit-birthday.component';
 import AddImage from './components/add-image.component';
+import Register from './components/register.component';
+import Login from './components/login.component';
 
 function App() {
   return (
@@ -13,7 +15,8 @@ function App() {
       <Route path="/add" component={AddBirthday} />
       <Route path="/edit/:id" component={EditBirthday} />
       <Route path="/image/:id" component={AddImage} />
-      {/* <Route path="/user" component={CreateUser} /> */}
+      <Route path="/user/register" component={Register} />
+      <Route path="/user/login" component={Login} />
     </Router>
   );
 }

@@ -2,68 +2,159 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import '../css/container.css';
 import axios from 'axios';
-import List from '../DisplayList'
+import List, { DisplayMessage } from '../utils/functions_for_components';
   
 
 export default class DisplayList extends Component {
     constructor(props){
         super(props);
+        this.isLoggedIn = localStorage.getItem('isLoggedIn');
+        this.email = localStorage.getItem('email');
+
         this.todayBirthdayList = [];
         this.deleteBirthday = this.deleteBirthday.bind(this);
-        this.checkBirthdays = this.checkBirthdays.bind(this);
-
-        this.state ={ birthday: []};
+        this.onChangeInput = this.onChangeInput.bind(this);
+        this.onChangeAddPeople = this.onChangeAddPeople.bind(this);
+        this.state ={ 
+            birthday: [],
+            search: '',
+            className: '',
+            message: '',
+            classes: {
+                deleteButton: '',
+                editButton: ''
+            },
+            email: this.email,
+            isLoggedIn: this.isLoggedIn,
+            display: 'hideComponent'
+        };
     }
     componentDidMount(){
-        axios.get('http://localhost:4000/days/')
-            .then(res => this.setState({ birthday: res.data }))
-            .catch(err => {console.log(err);});
+        this.loading();
+        if(this.state.birthday.length === 0){
+            axios.get('http://localhost:4000/days/')
+                .then(res => this.setState({ birthday: res.data }))
+                .catch(err => console.log(err));
         }
-    checkBirthdays(){        
-        this.state.birthday.forEach(e => {
-            const d = new Date();
-            if(
-                e.year===d.getFullYear() && 
-                parseInt(e.month) === d.getMonth() &&
-                e.date === d.getDate()
-            ){
-                this.todayBirthdayList.push(e)
-            } 
-            console.log(this.todayBirthdayList);
-        });
-        // axios.post('http://localhost:4000/days/mail',{ text: 'Hiii' })
-        //     .then(res => console.log('Success:', res))
-        //     .catch(err => console.log(err))
+            
+        if(this.isLoggedIn){
+            this.setState({
+                email: this.email,
+                display: ''
+            })
+        } else {
+            this.setState({
+                isLoggedIn: false,
+            })
+        }
     }
-    deleteBirthday(id){
-        axios.delete('http://localhost:4000/days/'+id)
-            .then(res => console.log(res.data));
-        
+    componentDidUpdate(){
+        if(this.state.className !== ''){
+            setTimeout(() => {
+                this.setState({
+                    className: '',
+                    message: ''
+                })
+            }, 2000);
+        }
+    }
+    onChangeInput(e){
         this.setState({
-            birthday: this.state.birthday.filter(bd => bd._id !== id)
+            search: e.target.value.toLowerCase()
         })
     }
+    onChangeAddPeople(){
+        if(this.state.isLoggedIn){
+            this.props.history.push({
+                pathname: '/add',
+                state: { isLoggedIn: this.state.isLoggedIn}
+            })
+        } else {
+            this.setState({
+                className: 'displayMessage',
+                message: 'Please Login to Add new Birthdays.'
+            })
+        }
+    }
+    loading(){
+        this.setState({
+            className: 'displayMessage',
+            message: 'Loading..'
+        })
+    }
+    deleteBirthday(id){
+        this.loading();
+        if(this.state.isLoggedIn){
+            axios.delete('http://localhost:4000/days/'+id)
+                .then(res => {
+                    this.setState({
+                        className: 'displayMessage',
+                        message: res.data.message,
+                        birthday: this.state.birthday.filter(bd => bd._id !== id)
+                    });
+                }).catch(err => {
+                    this.setState({
+                        className: 'displayMessage',
+                        message: err,
+                    });
+                })
+        } else {
+            console.log('register or login')
+            this.setState({
+                className: 'displayMessage',
+                message: 'Please Login to Delete Birthdays.'
+            })
+        }
+    }
     birthdayList(){
-        return this.state.birthday.map(bd => {
-            return <List bd={bd} deleteBirthday={this.deleteBirthday} editBirthday={this.editBirthday} key={bd._id} />;
+        return this.state.birthday
+        .filter(bd => this.state.search === '' || bd.name.toLowerCase().includes(this.state.search))
+        .map(bd => {
+            return <List bd={bd} isLoggedIn={this.isLoggedIn} deleteBirthday={this.deleteBirthday} editBirthday={this.editBirthday} key={bd._id} className='listContainer'/>;
         });
     }
     render() {
+        let loginStatus;
+        if(this.isLoggedIn){
+           loginStatus = 'Logged In';
+        } else {
+            loginStatus = 'Not Logged In';
+        }
         return (
             <div className="App">
                 <main className="main-container">
-                    <section className='container'>
-                        <h3>
-                             <span className='displayCount'>Count: {this.state.birthday.length}</span>
-                            Birthdays
-                        </h3>
-                        <button onClick={this.checkBirthdays}>Check</button>
-                        <Link to="/add">
-                            <button className='addBtn' onClick={() => console.log('all working')}>
-                                Add People
+                    <div id='loginContainer'>
+                        <DisplayMessage className={`hideMessage ${this.state.className}`} key={Date.now()+''} message={this.state.message}/>
+                        <Link to='/user/login'>
+                            <button id='loginBtn'>
+                                Login
                             </button>
                         </Link>
-                       { this.birthdayList() }
+                        <Link to='/user/register'>
+                            <button id='registerBtn'>
+                                Register
+                            </button>
+                        </Link>
+                    </div>
+                    <section className='container'>
+                        <h3>
+                            Birthdays
+                      </h3>
+                        <div className='info'>
+                             <span className='displayCount'>Count: {this.state.birthday.length}</span>
+                             <span className='displayLoginStatus'>{ loginStatus }</span>
+                        </div>
+
+                        <button className='addBtn' onClick={this.onChangeAddPeople}>
+                            Add People
+                        </button>
+                        <div className='filters'>
+                            <label className='searchBarLabel'>Search: </label>
+                            <input className='filterList' value={this.state.search} type='text' onChange={this.onChangeInput}/>
+                        </div>
+                        <div className='lists'>
+                            { this.birthdayList() }
+                        </div>
                     </section>
                 </main>
             </div>
