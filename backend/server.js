@@ -1,12 +1,16 @@
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
+const path = require('path');
 
 // environment variables
 require('dotenv').config();
 
 const app = express();
 const port = process.env.PORT || 4000;
+
+app.set('port', port)
+
 
 app.use(cors());
 app.use(express.json());
@@ -34,6 +38,14 @@ app.use('/days', addBirthdays);
 
 // images folder for saving uploaded avatar
 app.use('/images', express.static('./images'));
+
+const publicPath = '../front-end/public';
+
+app.use(express.static(publicPath));
+
+// app.get('*',(req, res) => {
+//     res.sendFile(path.join(publicPath, 'index.html'));
+// })
 
 app.listen(port, function() {
     console.log(`Server up and running on port ${port}`);
