@@ -56,7 +56,7 @@ export default class Register extends Component {
                     className: '',
                     message: ''
                 })
-            }, 2000);
+            }, 1000);
         }
     }
     loading(){
@@ -198,7 +198,6 @@ export default class Register extends Component {
         });
     }
     onSubmit(e){
-        console.log(e.target);
         e.preventDefault();
         let isSuccess = false;
         const user = {

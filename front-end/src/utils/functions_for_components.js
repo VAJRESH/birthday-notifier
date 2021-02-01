@@ -27,12 +27,7 @@ const List = function(props) {
   }
   return (
     <article key={props.bd._id} className={`person ${props.bd.isBirthday}`}>
-      <Link to={{
-              pathname:'/image/:id',
-              state: props.bd._id
-          }}>
-        <img src={props.bd.image} alt={props.bd.name} />
-      </Link>
+      <img src={props.bd.image} alt={props.bd.name} />
       <div className='details'>
           <h4>{props.bd.name}</h4>
           <section>
@@ -64,9 +59,24 @@ function capitalize(str){
     return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
+function limit(){
+  const d = new Date();
+  let date = d.getDate();
+  let month = d.getMonth();
+  const year = d.getFullYear();
+  if(date<10){
+    date = '0'+date; 
+  }
+  if(month<10){
+    month = '0'+month;
+  }
+  return `${year}-${month}-${date}`;
+}
+
 export default List;
 export {
   capitalize,
   DisplayMessage,
-  LogOutButton
+  LogOutButton,
+  limit
 };

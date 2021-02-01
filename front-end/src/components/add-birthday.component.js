@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { capitalize, DisplayMessage } from '../utils/functions_for_components';
+import { capitalize, DisplayMessage, limit } from '../utils/functions_for_components';
 
 export default class AddBirthday extends Component {
     constructor(props){
@@ -11,7 +11,7 @@ export default class AddBirthday extends Component {
         this.onChangeDate = this.onChangeDate.bind(this);
         this.onChangeGender = this.onChangeGender.bind(this);
         this.onChangeImage = this.onChangeImage.bind(this);
-        this.onSubmit = this.onSubmit.bind(this);
+        this.onSubmit = this.onSubmit.bind(this)
 
         this.state = {
             className: "",
@@ -41,7 +41,7 @@ export default class AddBirthday extends Component {
                     isBirthday: false,
                     imageValue: ''
                 });
-            }, 2000);
+            }, 1000);
         }
     }
     onChangeName(e){
@@ -167,6 +167,7 @@ export default class AddBirthday extends Component {
                             <input type="date"
                             required
                             className="input"
+                            max={limit()}
                             value={this.state.date}
                             onChange={this.onChangeDate}
                             />

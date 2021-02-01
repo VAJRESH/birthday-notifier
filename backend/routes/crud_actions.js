@@ -32,7 +32,9 @@ let upload = multer({
 //** GET REQUESTS
 // get all entries
 router.route('/').get((req, res) => {
-    Birthday.find({}).sort({'name':1})
+    let newDate = new Date()
+    const [month, days] = [newDate.getMonth(), newDate.getDay()]
+    Birthday.find({}).sort({'month': 1, 'date': 1})
     .then(birthday => res.json(birthday))
     .catch(err => res.status(400).json('Error: ' + err));
 });
@@ -56,14 +58,13 @@ router.route('/:id').delete((req, res) => {
         }
         res.json({ message: `${birthday.name} Birthday deleted` })
     })
-    .catch(err => res.status(400).json('Error: ' + console.log(err)));
+    .catch(err => res.status(400).json(`Error: ${err}`));
 });
 
 
 //** POST REQUESTS
 // add new entry
 router.route('/add').post(upload.single('image'), (req, res) => {
-    console.log(req.body);
     const name = req.body.name;
     const age = req.body.age;
     const gender = req.body.gender;
@@ -91,12 +92,11 @@ router.route('/add').post(upload.single('image'), (req, res) => {
 
     newBirthday.save()
     .then(() => res.json({ message: `${newBirthday.name} Birthday added` }))
-    .catch(err => res.status(400).json('Error: ' + console.log(err)));
+    .catch(err => res.status(400).json(`Error: ${err}`));
 });
 
 // update a entry
 router.route('/update/:id').post(upload.single('image'), (req, res) => {
-    console.log(req.body);
     Birthday.findById(req.params.id)
         .then(birthday => {
             birthday.name = req.body.name,
@@ -114,7 +114,26 @@ router.route('/update/:id').post(upload.single('image'), (req, res) => {
 
             birthday.save()
                 .then(() => res.json({message: `${birthday.name}'s Birthday updated` }))
-                .catch(err => res.status(400).json(`Error: ${console.log(err)}`));
+                .catch(err => res.status(400).json(`Error: ${err}`));
+            }).catch(err => res.status(400).json(`Error: ${err}`));
+});
+
+router.route('/update/isBirthday/:id').post((req, res) => {
+    console.log(req.body)
+    Birthday.findById(req.params.id)
+        .then(birthday => {
+            birthday.name = birthday.name,
+            birthday.age = req.body.age,
+            birthday.gender = birthday.gender,
+            birthday.date = birthday.date,
+            birthday.month = birthday.month,
+            birthday.year = birthday.year,
+            birthday.image = birthday.image;
+            birthday.isBirthday = req.body.isBirthday
+
+            birthday.save()
+                .then(() => res.json({message: `${birthday.name}'s Birthday updated` }))
+                .catch(err => res.status(400).json(`Error: ${err}`));
             }).catch(err => res.status(400).json(`Error: ${err}`));
 });
 
@@ -138,10 +157,8 @@ router.route('/mail').post((req, res) => {
     }
     transport.sendMail(mailOptions, function(err, info){
         if(err){
-            console.log(err);
             res.json({"Error: ": err});
         } else{
-            console.log("Email Sent.");
             res.json({"Success: ": info.response });
         }
     });

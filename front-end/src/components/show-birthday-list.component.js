@@ -13,11 +13,11 @@ export default class DisplayList extends Component {
 
         this.todayBirthdayList = [];
         this.deleteBirthday = this.deleteBirthday.bind(this);
-        this.onChangeInput = this.onChangeInput.bind(this);
+        this.onChangeSearchName = this.onChangeSearchName.bind(this);
         this.onChangeAddPeople = this.onChangeAddPeople.bind(this);
         this.state ={ 
             birthday: [],
-            search: '',
+            searchName: '',
             className: '',
             message: '',
             classes: {
@@ -58,9 +58,9 @@ export default class DisplayList extends Component {
             }, 2000);
         }
     }
-    onChangeInput(e){
+    onChangeSearchName(e){
         this.setState({
-            search: e.target.value.toLowerCase()
+            searchName: e.target.value.toLowerCase()
         })
     }
     onChangeAddPeople(){
@@ -107,8 +107,27 @@ export default class DisplayList extends Component {
         }
     }
     birthdayList(){
-        return this.state.birthday
-        .filter(bd => this.state.search === '' || bd.name.toLowerCase().includes(this.state.search))
+        let newDate = new Date(), year, sortedList = [];
+        this.state.birthday
+        .forEach(bd => {
+            year = newDate.getFullYear();
+            let birthDate = new Date(year, bd.month, bd.date);
+            if(birthDate.getTime()<newDate.getTime()){
+                birthDate.setFullYear(year+1);
+                if(
+                    birthDate.getMonth() === newDate.getMonth() && 
+                    birthDate.getDate() === newDate.getDate()
+                    ){
+                        birthDate.setFullYear(year);
+                }
+            }
+            // arr.push(a1);
+            bd.fromNow = (new Date().getTime()- birthDate.getTime());
+            sortedList.push(bd)
+            sortedList.sort((a,b) => b.fromNow-a.fromNow);
+        });
+        return sortedList
+        .filter(bd => this.state.searchName === '' || bd.name.toLowerCase().includes(this.state.searchName))
         .map(bd => {
             return <List bd={bd} isLoggedIn={this.isLoggedIn} deleteBirthday={this.deleteBirthday} editBirthday={this.editBirthday} key={bd._id} className='listContainer'/>;
         });
@@ -150,7 +169,7 @@ export default class DisplayList extends Component {
                         </button>
                         <div className='filters'>
                             <label className='searchBarLabel'>Search: </label>
-                            <input className='filterList' value={this.state.search} type='text' onChange={this.onChangeInput}/>
+                            <input className='filterList' value={this.state.searchName} placeholder='By Name' type='text' onChange={this.onChangeSearchName}/>
                         </div>
                         <div className='lists'>
                             { this.birthdayList() }

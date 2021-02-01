@@ -151,7 +151,8 @@ a{
     height: 100px;
     object-fit: cover;
     border-radius: 50%;
-    margin: 10px 3vw 0px;
+    text-align: center;
+    margin: 10px auto;
     box-shadow: 3px 10px 15px rgba(0, 0, 0, 0.253);
 }
 .person h4 {

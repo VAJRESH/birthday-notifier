@@ -37,12 +37,12 @@ export default class Register extends Component {
                     className: '',
                     message: ''
                 })
-            }, 2000);
+            }, 1000);
         }
         if(localStorage.getItem('isLoggedIn')){
             setTimeout(() => {
                 window.location.href = '/';
-            }, 2000);
+            }, 1000);
         }
     }
     onClickLogout(){
@@ -125,7 +125,6 @@ export default class Register extends Component {
     }
     onSubmit(e){
         this.loading();
-        console.log('pressed')
         e.preventDefault();
         const user = {
             email: this.state.email,

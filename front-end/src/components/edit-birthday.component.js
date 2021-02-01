@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import List, { capitalize, DisplayMessage } from '../utils/functions_for_components';
+import List, { capitalize, DisplayMessage, limit } from '../utils/functions_for_components';
 
 export default class EditBirthday extends Component {
     constructor(props){
@@ -160,7 +160,7 @@ export default class EditBirthday extends Component {
                 className: '',
                 message: ''
             })
-        }, 5000);
+        }, 1000);
     }
 
     render() {
@@ -196,6 +196,7 @@ export default class EditBirthday extends Component {
                         <label>Date:</label>
                         <input type="date"
                         className="input"
+                        max={limit()}
                         value={this.state.date}
                         onChange={this.onChangeDate}
                         />
