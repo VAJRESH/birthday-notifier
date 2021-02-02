@@ -1,2 +1,5 @@
 # Ignore API secrets
 .env
+
+# dependencies
+/node_modules
