@@ -17,11 +17,13 @@ app.use(express.json());
 
 // database connection
 const uri = process.env.URI;
-mongoose.connect(uri, {
-    useNewUrlParser: true,
-    useCreateIndex: true,
-    useUnifiedTopology: true
-}).catch(err => console.log(err));
+(async () => {
+    await mongoose.connect(uri, {
+        useNewUrlParser: true,
+        useCreateIndex: true,
+        useUnifiedTopology: true
+    }).catch(err => console.log(err));
+})()
 
 const connection = mongoose.connection;
 connection.once('open', () => {
