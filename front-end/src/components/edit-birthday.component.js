@@ -42,7 +42,7 @@ export default class EditBirthday extends Component {
         
     }
     componentDidMount(){
-        axios.get('http://localhost:4000/days/'+this.state.oldEntries.id)
+        axios.get('/days/'+this.state.oldEntries.id)
             .then(res => {
                 this.setState({
                     oldEntries: {
@@ -132,22 +132,40 @@ export default class EditBirthday extends Component {
             birthdays.set('name', capitalize(this.state.oldEntries.name));
         }
         if(birthdays.get('gender')===''){
+            console.log('sa')
             birthdays.set('gender', this.state.oldEntries.gender);
         }
-        if(birthdays.get('date') === 0){
-            e = {"target":{"value": this.state.date}};
-            this.onChangeDate(e)
-            birthdays.set('age', this.state.oldEntries.age);
+        if(parseInt(birthdays.get('date')) === 0){
+            const dob = new Date(
+                this.state.oldEntries.year,
+                this.state.oldEntries.month,
+                this.state.oldEntries.date,
+            );
+            const date = new Date();
+    
+            const birthYear = dob.getFullYear();
+            const birthMonth = dob.getMonth();
+            const birthDate = dob.getDate();
+            
+            const currentYear = date.getFullYear();
+            const currentMonth = date.getMonth();
+            const currentDate = date.getDate();
+    
+            let yearAge = currentYear-birthYear;
+            if(!((currentMonth>=birthMonth) && (currentDate>=birthDate))){
+                yearAge--;
+            }
+            birthdays.set('age', yearAge);
             birthdays.set('date',this.state.oldEntries.date);
             birthdays.set('month', this.state.oldEntries.month);
             birthdays.set('year', this.state.oldEntries.year);
-            birthdays.set('isBirthday', this.state.isBirthday);
+            birthdays.set('isBirthday', this.state.oldEntries.isBirthday);
         }
         if(birthdays.get('image') === ''){
             birthdays.append('imagePath', this.state.oldEntries.image);
         }
         console.log(...birthdays)
-        axios.post('http://localhost:4000/days/update/'+this.id, birthdays)
+        axios.post('/days/update/'+this.id, birthdays)
             .then(res => {
                 this.setState({
                     className: 'displayMessage',

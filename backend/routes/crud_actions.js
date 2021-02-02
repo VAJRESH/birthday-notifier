@@ -72,11 +72,11 @@ router.route('/add').post(upload.single('image'), (req, res) => {
     const month = req.body.month;
     const year = req.body.year;
     const isBirthday = req.body.isBirthday;
-    let image;
+    let image = req.protocol+'://'+req.get('host')+'/images/';
     if(req.body.image === ''){
-        image = 'http://localhost:4000/images/default-avatar.jpg';
+        image += 'default-avatar.jpg';
     } else {
-        image = req.protocol+'://'+req.get('host')+'/images/'+req.file.filename;
+        image += req.file.filename;
     }
 
     const newBirthday = new Birthday({

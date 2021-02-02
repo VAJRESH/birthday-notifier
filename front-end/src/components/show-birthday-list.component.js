@@ -13,11 +13,11 @@ export default class DisplayList extends Component {
 
         this.todayBirthdayList = [];
         this.deleteBirthday = this.deleteBirthday.bind(this);
-        this.onChangeSearchName = this.onChangeSearchName.bind(this);
+        this.onChangeInput = this.onChangeInput.bind(this);
         this.onChangeAddPeople = this.onChangeAddPeople.bind(this);
         this.state ={ 
             birthday: [],
-            searchName: '',
+            search: '',
             className: '',
             message: '',
             classes: {
@@ -32,7 +32,7 @@ export default class DisplayList extends Component {
     componentDidMount(){
         this.loading();
         if(this.state.birthday.length === 0){
-            axios.get('http://localhost:4000/days/')
+            axios.get('/days/')
                 .then(res => this.setState({ birthday: res.data }))
                 .catch(err => console.log(err));
         }
@@ -55,12 +55,12 @@ export default class DisplayList extends Component {
                     className: '',
                     message: ''
                 })
-            }, 2000);
+            }, 1000);
         }
     }
-    onChangeSearchName(e){
+    onChangeInput(e){
         this.setState({
-            searchName: e.target.value.toLowerCase()
+            search: e.target.value.toLowerCase()
         })
     }
     onChangeAddPeople(){
@@ -85,7 +85,7 @@ export default class DisplayList extends Component {
     deleteBirthday(id){
         this.loading();
         if(this.state.isLoggedIn){
-            axios.delete('http://localhost:4000/days/'+id)
+            axios.delete('/days/'+id)
                 .then(res => {
                     this.setState({
                         className: 'displayMessage',
@@ -107,27 +107,26 @@ export default class DisplayList extends Component {
         }
     }
     birthdayList(){
-        let newDate = new Date(), year, sortedList = [];
+        let lists = [], newDate = new Date(), year, bdate;
+
         this.state.birthday
         .forEach(bd => {
             year = newDate.getFullYear();
-            let birthDate = new Date(year, bd.month, bd.date);
-            if(birthDate.getTime()<newDate.getTime()){
-                birthDate.setFullYear(year+1);
+            bdate = new Date(year, bd.month, bd.date);
+            if(bdate.getTime()<newDate.getTime()){
                 if(
-                    birthDate.getMonth() === newDate.getMonth() && 
-                    birthDate.getDate() === newDate.getDate()
+                    !(bdate.getMonth() === newDate.getMonth() &&
+                    bdate.getDate() === newDate.getDate())
                     ){
-                        birthDate.setFullYear(year);
-                }
+                        bdate.setFullYear(year+1);
+                    }
             }
-            // arr.push(a1);
-            bd.fromNow = (new Date().getTime()- birthDate.getTime());
-            sortedList.push(bd)
-            sortedList.sort((a,b) => b.fromNow-a.fromNow);
-        });
-        return sortedList
-        .filter(bd => this.state.searchName === '' || bd.name.toLowerCase().includes(this.state.searchName))
+            bd.order = bdate.getTime() - newDate.getTime();
+            lists.push(bd);
+        })
+        return lists
+        .sort((a,b) => a.order-b.order)
+        .filter(bd => this.state.search === '' || bd.name.toLowerCase().includes(this.state.search))
         .map(bd => {
             return <List bd={bd} isLoggedIn={this.isLoggedIn} deleteBirthday={this.deleteBirthday} editBirthday={this.editBirthday} key={bd._id} className='listContainer'/>;
         });
@@ -169,7 +168,7 @@ export default class DisplayList extends Component {
                         </button>
                         <div className='filters'>
                             <label className='searchBarLabel'>Search: </label>
-                            <input className='filterList' value={this.state.searchName} placeholder='By Name' type='text' onChange={this.onChangeSearchName}/>
+                            <input className='filterList' value={this.state.search} type='text' onChange={this.onChangeInput}/>
                         </div>
                         <div className='lists'>
                             { this.birthdayList() }

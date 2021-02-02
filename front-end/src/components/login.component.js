@@ -46,7 +46,7 @@ export default class Register extends Component {
         }
     }
     onClickLogout(){
-        axios.post('http://localhost:4000/user/logout', {email: localStorage.getItem('email')})
+        axios.post('/user/logout', {email: localStorage.getItem('email')})
         .then(res => {
             this.setState({
                 className: 'displayMessage',
@@ -135,7 +135,7 @@ export default class Register extends Component {
             this.state.passValidation.className === ''
             ){
                 // NoOneShouldGuess!@&*
-                axios.post('http://localhost:4000/user/login', user)
+                axios.post('/user/login', user)
                     .then(res => {
                         this.setState({
                             className: 'displayMessage',

@@ -112,7 +112,7 @@ export default class AddBirthday extends Component {
             birthdays.append('year', this.state.year);
             birthdays.append('isBirthday', this.state.isBirthday);
             birthdays.append('image', this.state.image);
-            axios.post('http://localhost:4000/days/add', birthdays)
+            axios.post('/days/add', birthdays)
                 .then(res => {
                     this.setState({
                         className: 'displayMessage',
