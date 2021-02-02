@@ -1,1 +1,1 @@
-web: npm start
+worker: node backend/server.js
