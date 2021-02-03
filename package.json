@@ -24,7 +24,7 @@
     "backend": "nodemon server.js",
     "dev": "concurrently --kill-other-on-fail \"npm run frontend\" \"npm run backend\" ",
     "start": "node server.js",
-    "heroku-postbuild": "npm install && cd front-end && npm install && npm run build",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install && cd front-end && npm install && npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "engines": {
