@@ -30,7 +30,7 @@ connection.once('open', () => {
     console.log('Mongodb connection successful');
 });
 
-// login and logout system
+// register and login and logout system
 const user = require('./routes/user');
 app.use('/user', user);
 
