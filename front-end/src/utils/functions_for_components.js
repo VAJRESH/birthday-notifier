@@ -27,7 +27,7 @@ const List = function(props) {
   }
   return (
     <article key={props.bd._id} className={`person ${props.bd.isBirthday}`}>
-      <img src={window.location.origin+'/'+props.bd.image} alt={props.bd.name} />
+      <img src={window.location.origin+props.bd.image} alt={props.bd.name} />
       <div className='details'>
           <h4>{props.bd.name}</h4>
           <section>
