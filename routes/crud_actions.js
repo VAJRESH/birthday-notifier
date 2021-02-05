@@ -2,11 +2,13 @@ const express = require('express');
 const nodemailer = require('nodemailer');
 const multer = require('multer');
 const fs = require('fs');
+const path = require('path');
 
 let Birthday = require('../models/birthday.models');
 let router = express.Router();
 
-require('dotenv').config();
+require('dotenv').config({path: path.join(__dirname, '..', '.env')});
+
 
 // uploads the images to the server folder using above logic
 let upload = multer({ 
@@ -46,6 +48,8 @@ router.route('/:id').get((req, res) => {
         .catch(err => res.status(400).json(`Error: ${err}`));
 });
 
+// get current protocol and host
+// router.route
 
 //** DELETE REQUESTS 
 // delete a entry
@@ -72,11 +76,11 @@ router.route('/add').post(upload.single('image'), (req, res) => {
     const month = req.body.month;
     const year = req.body.year;
     const isBirthday = req.body.isBirthday;
-    let image = req.protocol+'://'+req.get('host')+'/images/';
+    let image;
     if(req.body.image === ''){
-        image += 'default-avatar.jpg';
+        image = '/images/default-avatar.jpg';
     } else {
-        image += req.file.filename;
+        image = '/images/'+req.file.filename;
     }
 
     const newBirthday = new Birthday({
@@ -109,7 +113,9 @@ router.route('/update/:id').post(upload.single('image'), (req, res) => {
             if(req.file === undefined){
                 birthday.image = req.body.imagePath;
             } else {
-                birthday.image = req.protocol+'://'+req.get('host')+'/images/'+req.file.filename
+                const imageName = birthday.image.split('/');
+                fs.unlinkSync('./images/'+imageName[imageName.length-1]);
+                birthday.image = '/images/'+req.file.filename
             }
 
             birthday.save()

@@ -67,7 +67,7 @@ export default class AddBirthday extends Component {
         const currentDate = date.getDate();
 
         let yearAge = currentYear-birthYear;
-        if(!((currentMonth>=birthMonth) && (currentDate>=birthDate))){
+        if(((currentMonth<=birthMonth) && (currentDate<birthDate))){
             yearAge--;
         }
         this.setState({
@@ -163,7 +163,7 @@ export default class AddBirthday extends Component {
                         </div>
 
                         <div className="form-group">
-                            <label>Date:</label>
+                            <label>Date: </label>
                             <input type="date"
                             required
                             className="input"

@@ -1,5 +1,9 @@
-const express = require('express');
 const axios = require('axios');
+const path = require('path');
+
+require('dotenv').config({path: path.join(__dirname, '..', '.env')});
+
+const host = process.env.HOST;
 
 //TODO cron job, reminder message
 function reminderMessage(data){
@@ -17,12 +21,11 @@ function getAge(data){
         }
         --yearAge;
     }
-    // console.log(yearAge);
     return yearAge;
 }
 
 async function updateList(){
-    await axios.get('http://localhost:4000/days/')
+    await axios.get(host+'/days/')
     .then(res => {
         const list = res.data;
         const d = new Date();
@@ -38,7 +41,7 @@ async function updateList(){
                             isBirthday: true,
                             age: yearAge
                         }
-                        axios.post('http://localhost:4000/days/update/isBirthday/'+bd._id, update)
+                        axios.post(host+'/days/update/isBirthday/'+bd._id, update)
                             .then(res => console.log(res.data))
                             .catch(err => console.log(err));
                     } else {
@@ -46,12 +49,11 @@ async function updateList(){
                     }
                     
                 } else if(bd.isBirthday){
-                    console.log('up ')
                     let update = {
                         isBirthday: false,
                         age: yearAge
                     }
-                    axios.post('http://localhost:4000/days/update/isBirthday/'+bd._id, update)
+                    axios.post(host+'/days/update/isBirthday/'+bd._id, update)
                         .then(res => console.log(res.data))
                         .catch(err => console.log(err));
                 }
@@ -62,18 +64,25 @@ async function updateList(){
 }
 
 function checkAndMail(){
-    axios.get('http://localhost:4000/days/')
+    axios.get(host+'/days/')
     .then(res => {
             r = res.data;
+            const d = new Date();
             r.forEach(e => {
-                console.log(e.name, e.age);
-                if(e.isBirthday){
-                    let text = reminderMessage(e); 
-                //     axios.post('http://localhost:4000/days/mail/', { text: text })
-                //         .then(res => {
-                //             console.log("Email sent");
-                //         })
-                // .catch(err => console.log(err));
+                if(
+                    e.year===d.getFullYear() && 
+                    parseInt(e.month) === d.getMonth() &&
+                    e.date === d.getDate()
+                    ){
+                        if(e.isBirthday){
+                            console.log(e.name)
+                            let text = reminderMessage(e);
+                            axios.post(host+'/days/mail/', { text: text })
+                                .then(res => {
+                                    console.log("Email sent");
+                                })
+                        .catch(err => console.log(err));
+                    }
                 }
         })
     })
@@ -81,6 +90,4 @@ function checkAndMail(){
 }
 
 updateList();
-// checkAndMail();
-
 

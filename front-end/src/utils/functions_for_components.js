@@ -27,7 +27,7 @@ const List = function(props) {
   }
   return (
     <article key={props.bd._id} className={`person ${props.bd.isBirthday}`}>
-      <img src={props.bd.image} alt={props.bd.name} />
+      <img src={window.location.origin+'/'+props.bd.image} alt={props.bd.name} />
       <div className='details'>
           <h4>{props.bd.name}</h4>
           <section>
@@ -62,7 +62,7 @@ function capitalize(str){
 function limit(){
   const d = new Date();
   let date = d.getDate();
-  let month = d.getMonth();
+  let month = d.getMonth()+1;
   const year = d.getFullYear();
   if(date<10){
     date = '0'+date; 

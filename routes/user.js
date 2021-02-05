@@ -38,14 +38,14 @@ router.post('/login', (req, res, next) => {
                                     message: 'Login Success',
                                     isLoggedIn: true
                                 }))
-                                .catch(err => res.json(err));
+                                .catch(err => res.json({err: err}));
                         } else{
                             res.json({ message: 'Incorrect Password!' }) 
                         }
                     })
-                    .catch(err => res.json(err));
+                    .catch(err => res.json({err: err}));
             }
-        }).catch(err => res.json(err));
+        }).catch(err => res.json({err: err}));
 })
 
 // register
@@ -77,7 +77,7 @@ router.route('/register').post((req, res) => {
                         .then(() => {
                             res.json({ message: 'Registered And Logged In Successfully' })
                         })
-                        .catch(err => res.json(err));
+                        .catch(err => res.json({err: err}));
                     });
                 });
             }
@@ -95,8 +95,8 @@ router.post('/logout', (req, res) => {
                 isLoggedIn: user.isLoggedIn,
                 message: 'Logged Out'
             }))
-            .catch(err => res.status(400).json(err));
-        }).catch(err => res.status(400).json(err));
+            .catch(err => res.status(400).json({err: err}));
+        }).catch(err => res.status(400).json({err: err}));
 })
 
 module.exports = router;
