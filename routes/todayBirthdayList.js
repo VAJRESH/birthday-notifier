@@ -2,10 +2,14 @@ const axios = require('axios');
 const path = require('path');
 
 require('dotenv').config({path: path.join(__dirname, '..', '.env')});
-
 const host = process.env.HOST;
 
-//TODO cron job, reminder message
+let schedule = require('node-schedule');
+let run = schedule.scheduleJob('0 */12 * * *', function(){
+    updateList();
+})
+
+//TODO reminder message
 function reminderMessage(data){
     const textArray = [`Hope your remember today is ${data.date} ${data.month}, ${data.name}'s Birthday. Don't forget to wish.`]
     return textArray[0];
@@ -88,6 +92,3 @@ function checkAndMail(){
     })
     .catch(err => res.json(err));
 }
-
-updateList();
-
