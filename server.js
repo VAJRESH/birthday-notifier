@@ -39,7 +39,7 @@ const addBirthdays = require('./routes/crud_actions');
 app.use('/days', addBirthdays);
 
 // images folder for saving uploaded avatar
-app.use('/images', express.static(path.join(__dirname, 'images')));
+app.use(express.static(path.join(__dirname, 'images')));
 
 const publicPath = path.join(__dirname, 'front-end', 'build');
 
