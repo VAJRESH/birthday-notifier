@@ -43,7 +43,7 @@ app.use(express.static(path.join(__dirname, 'images')));
 
 const publicPath = path.join(__dirname, 'front-end', 'build');
 
-app.use(express.static(publicPath));
+app.use('/images', express.static(publicPath));
 
 app.get('*',(req, res) => {
     res.sendFile(path.join(publicPath, 'index.html'));
