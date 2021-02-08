@@ -173,7 +173,7 @@ export default class EditBirthday extends Component {
                 });
             });
         setTimeout(() => {
-            window.location.href = '/';
+            // window.location.href = '/';  
             this.setState({
                 className: '',
                 message: ''

@@ -1,6 +1,7 @@
 const express = require('express');
 const nodemailer = require('nodemailer');
 const multer = require('multer');
+const cloudinary = require('cloudinary');
 const fs = require('fs');
 const path = require('path');
 
@@ -30,12 +31,16 @@ let upload = multer({
     }
 });
 
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
+})
+
 
 //** GET REQUESTS
 // get all entries
 router.route('/').get((req, res) => {
-    let newDate = new Date()
-    const [month, days] = [newDate.getMonth(), newDate.getDay()]
     Birthday.find({}).sort({'month': 1, 'date': 1})
     .then(birthday => res.json(birthday))
     .catch(err => res.status(400).json('Error: ' + err));
@@ -55,10 +60,9 @@ router.route('/:id').get((req, res) => {
 // delete a entry
 router.route('/:id').delete((req, res) => {
     Birthday.findByIdAndDelete(req.params.id)
-    .then(birthday => {
-        const imageName = birthday.image.split('/');
-        if(!(imageName[imageName.length-1].includes('default-avatar'))){
-            fs.unlinkSync('./images/'+imageName[imageName.length-1]);
+    .then( async birthday => {
+        if(!(birthday.image.includes('s24ifg1sweagshxz8wh1'))){
+            await cloudinary.uploader.destroy(birthday.image);
         }
         res.json({ message: `${birthday.name} Birthday deleted` })
     })
@@ -68,7 +72,7 @@ router.route('/:id').delete((req, res) => {
 
 //** POST REQUESTS
 // add new entry
-router.route('/add').post(upload.single('image'), (req, res) => {
+router.route('/add').post(upload.single('image'), async (req, res) => {
     const name = req.body.name;
     const age = req.body.age;
     const gender = req.body.gender;
@@ -76,11 +80,14 @@ router.route('/add').post(upload.single('image'), (req, res) => {
     const month = req.body.month;
     const year = req.body.year;
     const isBirthday = req.body.isBirthday;
-    let image;
-    if(req.body.image === ''){
-        image = '/images/default-avatar.jpg';
-    } else {
-        image = '/images/'+req.file.filename;
+    let image, cloudinary_id;
+    if(req.file === undefined){
+        image = "/images/default-avatar.jpg";
+        cloudinary_id = 'not needed!'
+    } else{
+        const results = await cloudinary.uploader.upload(req.file.path);
+        image = results.secure_url;
+        cloudinary_id = results.public_id;
     }
 
     const newBirthday = new Birthday({
@@ -91,7 +98,8 @@ router.route('/add').post(upload.single('image'), (req, res) => {
         month,
         year,
         isBirthday,
-        image
+        image,
+        cloudinary_id
     });
 
     newBirthday.save()
@@ -102,7 +110,7 @@ router.route('/add').post(upload.single('image'), (req, res) => {
 // update a entry
 router.route('/update/:id').post(upload.single('image'), (req, res) => {
     Birthday.findById(req.params.id)
-        .then(birthday => {
+        .then( async birthday => {
             birthday.name = req.body.name,
             birthday.age = req.body.age,
             birthday.gender = req.body.gender,
@@ -111,17 +119,19 @@ router.route('/update/:id').post(upload.single('image'), (req, res) => {
             birthday.year = req.body.year,
             birthday.isBirthday = req.body.isBirthday
             if(req.file === undefined){
-                birthday.image = req.body.imagePath;
+                birthday.image = "/images/default-avatar.jpg";
+                birthday.cloudinary_id = 'not needed!'
             } else {
-                const imageName = birthday.image.split('/');
-                fs.unlinkSync('./images/'+imageName[imageName.length-1]);
-                birthday.image = '/images/'+req.file.filename
+                await cloudinary.uploader.destroy(birthday.image);
+                const results = await cloudinary.uploader.upload(req.file.path);
+                birthday.image = results.secure_url;
+                birthday.cloudinary_id = results.public_id;
             }
 
             birthday.save()
                 .then(() => res.json({message: `${birthday.name}'s Birthday updated` }))
-                .catch(err => res.status(400).json(`Error: ${err}`));
-            }).catch(err => res.status(400).json(`Error: ${err}`));
+                .catch(err => res.status(400).json(`Error: ${console.log(err)}`));
+            }).catch(err => res.status(400).json(`Error: ${console.log(err)}`));
 });
 
 router.route('/update/isBirthday/:id').post((req, res) => {
@@ -135,6 +145,7 @@ router.route('/update/isBirthday/:id').post((req, res) => {
             birthday.month = birthday.month,
             birthday.year = birthday.year,
             birthday.image = birthday.image;
+            birthday.cloudinary_id = birthday.cloudinary_id;
             birthday.isBirthday = req.body.isBirthday
 
             birthday.save()

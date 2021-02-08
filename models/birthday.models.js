@@ -9,7 +9,8 @@ let Birthday = new Schema({
     month: { type: Number, required: true },
     year: { type: Number, required: true },
     isBirthday: { type: Boolean, required: true },
-    image: { type: String, required: true }
+    image: { type: String, required: true },
+    cloudinary_id: { type: String, required: true }
 }, {
     timestamps: true,
 })
