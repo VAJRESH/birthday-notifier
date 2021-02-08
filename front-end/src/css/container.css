@@ -102,7 +102,7 @@ a{
     text-transform: none;
     margin-bottom: 1rem;
 }
-.displayCount, .displayLoginStatus{
+.displayCount, .displayLoginStatus, .displayButton{
     display: inline;
     border-radius: 10px;
     padding: 5px 10px;
@@ -145,6 +145,24 @@ a{
 /* additional class to display whose birthday is today */
 .true{
     background-color: rgba(6, 255, 19, 0.514);
+}
+#true{
+    display: inline-block;
+    visibility: visible;
+    padding: 0px 5px 2px;
+    font-size: large;
+    font-weight: 500;
+    word-spacing: 10px;
+    margin: 5px;
+    word-spacing: 2px;
+    border-radius: 10px;
+    background-color: rgb(251, 255, 0);
+    color: rgb(255, 0, 0);
+    transition: 0.5s;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.527);
+}
+#false{
+    display: none;
 }
 .person img {
     width: 100px;

@@ -3,7 +3,20 @@ import { Link } from 'react-router-dom';
 import '../css/container.css';
 import axios from 'axios';
 import List, { DisplayMessage } from '../utils/functions_for_components';
-  
+
+function getAge(data){
+    const currentYear = new Date().getFullYear();
+    const currentMonth = new Date().getMonth();
+    const currentDate = new Date().getDate();
+    let yearAge = currentYear - data.year;
+    if(currentMonth<=data.month && currentDate<=data.date){
+        if(currentMonth===data.month && currentDate===data.date){
+            ++yearAge;
+        }
+        --yearAge;
+    }
+    return yearAge;
+}
 
 export default class DisplayList extends Component {
     constructor(props){
@@ -15,6 +28,7 @@ export default class DisplayList extends Component {
         this.deleteBirthday = this.deleteBirthday.bind(this);
         this.onChangeInput = this.onChangeInput.bind(this);
         this.onChangeAddPeople = this.onChangeAddPeople.bind(this);
+        this.updateList = this.updateList.bind(this);
         this.state ={ 
             birthday: [],
             search: '',
@@ -131,6 +145,41 @@ export default class DisplayList extends Component {
             return <List bd={bd} isLoggedIn={this.isLoggedIn} deleteBirthday={this.deleteBirthday} editBirthday={this.editBirthday} key={bd._id} className='listContainer'/>;
         });
     }
+    updateList(){
+        axios.get('/days/')
+            .then(res => {
+                const list = res.data;
+                const d = new Date();
+                list.forEach(bd => { 
+                    let yearAge = getAge(bd)
+                    if(
+                        bd.year===d.getFullYear() && 
+                        parseInt(bd.month) === d.getMonth() &&
+                        bd.date === d.getDate()
+                        ){
+                            if(!bd.isBirthday){
+                                let update = {
+                                    isBirthday: true,
+                                    age: yearAge
+                                }
+                                axios.post('/days/update/isBirthday/'+bd._id, update)
+                                    .then(res => console.log(res.data))
+                                    .catch(err => console.log(err));
+                            }
+                        } else if(bd.isBirthday){
+                            console.log('gone')
+                            let update = {
+                                isBirthday: false,
+                                age: yearAge
+                            }
+                            axios.post('/days/update/isBirthday/'+bd._id, update)
+                                .then(res => console.log(res.data))
+                                .catch(err => console.log(err));
+                        }
+                })
+            })
+            .catch(err => console.log(err));
+    }
     render() {
         let loginStatus;
         if(this.isLoggedIn){
@@ -160,6 +209,9 @@ export default class DisplayList extends Component {
                       </h3>
                         <div className='info'>
                              <span className='displayCount'>Count: {this.state.birthday.length}</span>
+                             <span>
+                                 <button className='displayButton' onClick={this.updateList}>Update List</button>
+                             </span>
                              <span className='displayLoginStatus'>{ loginStatus }</span>
                         </div>
 

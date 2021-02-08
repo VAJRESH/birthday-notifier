@@ -27,6 +27,7 @@ const List = function(props) {
   }
   return (
     <article key={props.bd._id} className={`person ${props.bd.isBirthday}`}>
+      <div id={props.bd.isBirthday.toString()}>Happy Birthday!!</div>
       <img src={props.bd.image} alt={props.bd.name} />
       <div className='details'>
           <h4>{props.bd.name}</h4>
