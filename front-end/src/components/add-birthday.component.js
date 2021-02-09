@@ -67,8 +67,11 @@ export default class AddBirthday extends Component {
         const currentDate = date.getDate();
 
         let yearAge = currentYear-birthYear;
-        if(((currentMonth<=birthMonth) && (currentDate<birthDate))){
-            yearAge--;
+        if(((currentMonth<=birthMonth) && (currentDate<=birthDate))){
+            if(currentMonth===birthMonth && currentDate===birthDate){
+                ++yearAge;
+            }
+            --yearAge;
         }
         this.setState({
             age: yearAge,

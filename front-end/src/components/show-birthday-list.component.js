@@ -151,12 +151,14 @@ export default class DisplayList extends Component {
                 const list = res.data;
                 const d = new Date();
                 list.forEach(bd => { 
-                    let yearAge = getAge(bd)
+                    console.log(bd);
+                    let yearAge = getAge(bd);
                     if(
                         bd.year===d.getFullYear() && 
                         parseInt(bd.month) === d.getMonth() &&
                         bd.date === d.getDate()
                         ){
+                            console.log('inside here');
                             if(!bd.isBirthday){
                                 let update = {
                                     isBirthday: true,
