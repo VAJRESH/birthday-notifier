@@ -150,8 +150,7 @@ export default class DisplayList extends Component {
             .then(res => {
                 const list = res.data;
                 const d = new Date();
-                list.forEach(bd => { 
-                    console.log(bd);
+                list.forEach(bd => {
                     let yearAge = getAge(bd);
                     if(
                         bd.year===d.getFullYear() && 
