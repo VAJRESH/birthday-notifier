@@ -153,7 +153,6 @@ export default class DisplayList extends Component {
                 list.forEach(bd => {
                     let yearAge = getAge(bd);
                     if(
-                        bd.year===d.getFullYear() && 
                         parseInt(bd.month) === d.getMonth() &&
                         bd.date === d.getDate()
                         ){
