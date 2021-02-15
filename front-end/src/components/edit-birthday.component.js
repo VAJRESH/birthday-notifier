@@ -84,7 +84,7 @@ export default class EditBirthday extends Component {
         const currentDate = date.getDate();
 
         let yearAge = currentYear-birthYear;
-        if(((currentMonth<=birthMonth)){
+        if((currentMonth<=birthMonth)){
             if((currentMonth === birthMonth) && (currentDate === birthDate)){
                 yearAge++;
             }
