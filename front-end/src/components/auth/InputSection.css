@@ -1,0 +1,27 @@
+.input-section {
+    display: grid;
+    grid-template-columns: 50% 50%;
+
+    position: relative;
+    margin: 20px;
+    font-size: 1.3rem;
+}
+
+.input-section .input {
+    width: fit-content;
+    outline: transparent;
+    border-radius: 10px;
+    border: 2px inset black;
+    padding: 5px;
+}
+
+.input-section small {
+    position: absolute;
+    top: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    
+    margin-top: 5px;
+    font-size: 1rem;
+    color: red;
+}

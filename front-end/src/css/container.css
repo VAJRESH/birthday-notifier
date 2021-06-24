@@ -84,16 +84,24 @@ a{
 
 /* white container in all pages */
 .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    
     position: relative;
     width: 94vw;
     height: 85vh;
     overflow-y: scroll;
-    text-align: center;
     margin: 1rem 3vw;
     background: rgb(255, 255, 255);
     border-radius: 0.25rem;
     padding: 2vw;
     box-shadow:  0 5px 15px rgba(51, 29, 29, 0.4);
+}
+.container > *{
+    width: 100%;
 }
 .container h3 {
     font-size: large;

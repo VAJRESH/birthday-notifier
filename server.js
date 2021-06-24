@@ -1,54 +1,56 @@
-const express = require('express');
-const cors = require('cors');
-const mongoose = require('mongoose');
-const path = require('path');
+const express = require("express");
+const cors = require("cors");
+const mongoose = require("mongoose");
+const path = require("path");
 
 // environment variables
-require('dotenv').config();
+require("dotenv").config();
 
 const app = express();
 const port = process.env.PORT || 4000;
 
-app.set('port', port)
+app.set("port", port);
 
-
+// middle wares and parser
 app.use(cors());
 app.use(express.json());
 
 // database connection
 const uri = process.env.URI;
-(async () => {
-    await mongoose.connect(uri, {
-        useNewUrlParser: true,
-        useCreateIndex: true,
-        useUnifiedTopology: true
-    }).catch(err => console.log(err));
-})()
+mongoose.connect(uri, {
+  useNewUrlParser: true,
+  useCreateIndex: true,
+  useUnifiedTopology: true,
+});
 
 const connection = mongoose.connection;
-connection.once('open', () => {
-    console.log('Mongodb connection successful');
+connection.once("open", () => {
+  console.log("Mongodb connection successful");
 });
 
 // register and login and logout system
-const user = require('./routes/user');
-app.use('/user', user);
+const user = require("./routes/user");
+app.use("/user", user);
+
+// auth routes
+const authRoutes = require("./routes/auth.routes");
+app.use("/auth", authRoutes);
 
 // routes for crud actions
-const addBirthdays = require('./routes/crud_actions');
-app.use('/days', addBirthdays);
+const addBirthdays = require("./routes/crud_actions");
+app.use("/days", addBirthdays);
 
 // images folder for saving uploaded avatar
-app.use('/images', express.static(path.join(__dirname, 'images')));
+app.use("/images", express.static(path.join(__dirname, "images")));
 
-const publicPath = path.join(__dirname, 'front-end', 'build');
-
+const publicPath = path.join(__dirname, "front-end", "build");
 app.use(express.static(publicPath));
 
-app.get('*',(req, res) => {
-    res.sendFile(path.join(publicPath, 'index.html'));
-})
+// serving frontend files
+app.get("*", (req, res) => {
+  res.sendFile(path.join(publicPath, "index.html"));
+});
 
-app.listen(port, function() {
-    console.log(`Server up and running on port ${port}`);
+app.listen(port, function () {
+  console.log(`Server up and running on port ${port}`);
 });

@@ -4,7 +4,8 @@ import { BrowserRouter as Router, Route} from "react-router-dom";
 import DisplayList from './components/show-birthday-list.component';
 import AddBirthday from './components/add-birthday.component';
 import EditBirthday from './components/edit-birthday.component';
-import Register from './components/register.component';
+import Register from './pages/Register';
+// import Register from './components/register.component';
 import Login from './components/login.component';
 
 function App() {
