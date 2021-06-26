@@ -1,0 +1,111 @@
+/* people's cards on every page */
+.person {
+    display: inline-grid;
+    grid-template-rows: auto auto auto;
+    min-width: 40vw;
+    width: 90%;
+    margin: 3vw;
+    cursor: default;
+    border-radius: 10px;
+    border: 1px solid red;
+    box-shadow: 0 5px 15px rgba(51, 29, 29, 0.4);
+    transition: transform .2s;
+}
+
+/* additional class to display whose birthday is today */
+.true {
+    background-color: rgba(6, 255, 19, 0.514);
+}
+
+#true {
+    display: inline-block;
+    visibility: visible;
+    padding: 0px 5px 2px;
+    font-size: large;
+    font-weight: 500;
+    word-spacing: 10px;
+    margin: 5px;
+    word-spacing: 2px;
+    border-radius: 10px;
+    background-color: rgb(251, 255, 0);
+    color: rgb(255, 0, 0);
+    transition: 0.5s;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.527);
+}
+
+#false {
+    display: none;
+}
+
+.person img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 50%;
+    text-align: center;
+    margin: 10px auto;
+    box-shadow: 3px 10px 15px rgba(0, 0, 0, 0.253);
+}
+
+.person h4 {
+    margin: auto auto 5px auto;
+    font-size: 1.5em;
+    color: rgb(38, 0, 255);
+    text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.575);
+}
+
+.person .details {
+    margin: 2vh auto;
+}
+
+.person p {
+    font-size: large;
+    font-weight: 500;
+    word-spacing: 10px;
+    margin-bottom: 0;
+}
+
+section>p {
+    display: inline-block;
+    padding: 0px 5px;
+    margin: 10px 5px;
+    word-spacing: 2px;
+    border-radius: 10px;
+    background-color: rgba(0, 162, 255, 0.3);
+    color: rgb(38, 0, 255);
+    transition: 0.5s;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.527);
+}
+
+.displayAge {
+    background-color: rgba(0, 162, 255, 0.3);
+    color: rgb(38, 0, 255);
+}
+
+.displayGender {
+    background-color: rgba(255, 153, 0, 0.3);
+    color: rgb(255, 8, 0);
+}
+
+.person:hover {
+    background-color: rgba(151, 151, 151, 0.3);
+}
+
+.true:hover {
+    background-color: rgba(6, 255, 19, 0.829);
+}
+
+
+/* css style if the screen width is greater than 750px */
+@media only screen and (min-width: 750px) {
+    .person {
+        min-width: 33%;
+        width: 22vw;
+        margin: 1em;
+    }
+
+    .person img {
+        width: 150px;
+        height: 150px;
+    }
+}

@@ -1,36 +1,28 @@
 import React, { useEffect, useState } from "react";
-import { Link, withRouter } from "react-router-dom";
+import { withRouter } from "react-router";
+import { Link } from "react-router-dom";
 import {
   isLoggedIn,
   isPasswordStrong,
   isValidEmail,
-  isValidName,
-  register,
+  login,
+  setCookies,
 } from "../actions/auth";
 import InputSection from "../components/auth/InputSection";
 
 // validates all the input and generate appropriate messages
 function useHandleInputs(history) {
   const [message, setMessage] = useState({
-    name: "",
     email: "",
     password: "",
     success: "",
   });
-  const [data, setData] = useState({ name: "", email: "", password: "" });
+  const [data, setData] = useState({ email: "", password: "" });
 
   useEffect(() => {
     if (isLoggedIn()) return history.push("/user/logout");
      // eslint-disable-next-line
   }, []);
-
-  function handleName(e) {
-    setMessage({
-      ...message,
-      name: isValidName(e.target.value),
-    });
-    setData({ ...data, name: e.target.value });
-  }
 
   function handleEmail(e) {
     setMessage({
@@ -51,45 +43,44 @@ function useHandleInputs(history) {
   function handleSubmit(e) {
     e.preventDefault();
 
-    register(data).then((response) => {
+    login(data).then((response) => {
       setMessage({
         ...message,
-        success: response ? response.error || response.message : "No response",
+        success: response ? response.error || "Login Success" : "No response",
       });
-      if (response.error === "Email is taken") {
+
+      if (response) {
+        setCookies("token", response.token);
+        localStorage.setItem("userId", response.user._id);
+        localStorage.setItem("name", response.user.name);
+        localStorage.setItem("email", response.user.email);
+        // redirect user to home page after successful login
         setTimeout(() => {
-          history.push("/user/login");
-        }, 1000);
+          history.push("/");
+        }, 2000);
       }
     });
   }
 
-  return { handleName, handleEmail, handlePassword, handleSubmit, message };
+  return { handleEmail, handlePassword, handleSubmit, message };
 }
 
-const Register = ({ history }) => {
-  const { handleName, handleEmail, handlePassword, handleSubmit, message } =
+const Login = ({ history }) => {
+  const { handleEmail, handlePassword, handleSubmit, message } =
     useHandleInputs(history);
 
   return (
     <div className="main-container">
       <form className="container" onSubmit={handleSubmit}>
-        <h1 className="heading">Register</h1>
+        <h1 className="heading">Login</h1>
         <div className="redirect-link">
-          <Link to="/user/login">
-            Please Login if you have already registered here
+          <Link to="/user/register">
+            Please Register if you don't have an account here
           </Link>
         </div>
 
         <div id={message.success && "true"}>{message.success}</div>
 
-        <InputSection
-          label="Name"
-          inputType="text"
-          example="John"
-          handleChange={handleName}
-          errorMessage={message.name}
-        />
         <InputSection
           label="Email"
           inputType="email"
@@ -106,10 +97,11 @@ const Register = ({ history }) => {
         />
 
         <div className="form-group">
-          <input type="submit" value="Register" />
+          <input type="submit" value="Login" />
         </div>
       </form>
     </div>
   );
 };
-export default withRouter(Register);
+
+export default withRouter(Login);

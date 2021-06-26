@@ -1,4 +1,5 @@
 const User = require("../models/user.model");
+const BirthdayList = require("../models/birthday.model");
 const jwt = require("jsonwebtoken");
 const expressJwt = require("express-jwt");
 
@@ -10,8 +11,14 @@ exports.register = (req, res) => {
     if (user) return res.status(400).json({ error: "Email is taken" });
 
     const newUser = new User({ name, email, password });
-    newUser.save((saveError, success) => {
+    newUser.save((saveError, user) => {
       if (saveError) return res.status(400).json({ error: saveError });
+      
+      const birthdayList = new BirthdayList({
+        userId: user._id,
+        belongsTo: user.name
+      });
+      birthdayList.save();
 
       res.json({ message: `New User, ${name} is registered. Please login.` });
     });
@@ -56,7 +63,8 @@ exports.isLoggedIn = (req, res, next) => {
   const userId = req.user._id;
   User.findById(userId).exec((findError, user) => {
     if (findError) return res.status(400).json({ error: findError });
-    if (!user) return res.status(400).json({ error: `User not found. Please Login!` });
+    if (!user)
+      return res.status(400).json({ error: `User not found. Please Login!` });
 
     req.user = user;
     next();

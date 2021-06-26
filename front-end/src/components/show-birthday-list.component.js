@@ -223,7 +223,7 @@ export default class DisplayList extends Component {
                             <input className='filterList' value={this.state.search} type='text' onChange={this.onChangeInput}/>
                         </div>
                         <div className='lists'>
-                            { this.birthdayList() }
+                            {/* { this.birthdayList() } */}
                         </div>
                     </section>
                 </main>

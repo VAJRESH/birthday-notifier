@@ -37,8 +37,8 @@ const authRoutes = require("./routes/auth.routes");
 app.use("/auth", authRoutes);
 
 // routes for crud actions
-const addBirthdays = require("./routes/crud_actions");
-app.use("/days", addBirthdays);
+const addBirthdays = require("./routes/birthday.routes");
+app.use("/birthday", addBirthdays);
 
 // images folder for saving uploaded avatar
 app.use("/images", express.static(path.join(__dirname, "images")));
