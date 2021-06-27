@@ -48,7 +48,8 @@ function useHandleInputs(history) {
         ...message,
         success: response ? response.error || "Login Success" : "No response",
       });
-
+      if (response.error) return;
+      
       if (response) {
         setCookies("token", response.token);
         localStorage.setItem("userId", response.user._id);

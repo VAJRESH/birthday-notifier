@@ -56,7 +56,8 @@ function useHandleInputs(history) {
         ...message,
         success: response ? response.error || response.message : "No response",
       });
-      if (response.error === "Email is taken") {
+      if (!response) return;
+      if (response.error === "Email is taken" || response.message) {
         setTimeout(() => {
           history.push("/user/login");
         }, 1000);

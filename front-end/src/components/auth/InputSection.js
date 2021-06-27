@@ -5,6 +5,7 @@ const InputSection = ({
   label,
   inputType,
   example,
+  isNotRequired,
   handleChange,
   errorMessage,
 }) => {
@@ -13,7 +14,7 @@ const InputSection = ({
       <label htmlFor={label}>{label}</label>
       <input
         type={inputType}
-        required
+        required={isNotRequired? false: true}
         placeholder={example}
         className="input"
         name={label}

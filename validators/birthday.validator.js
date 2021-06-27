@@ -1,8 +1,4 @@
-const {
-  isEmpty,
-  isValidEmail,
-  isPasswordLong,
-} = require("../helper/validations");
+const { isEmpty } = require("../helper/validations");
 
 exports.validateDetails = (req, res, next) => {
   const { name, gender, date, month, year, isBirthday } = req.body;
@@ -14,7 +10,7 @@ exports.validateDetails = (req, res, next) => {
     isEmpty(year) ||
     isEmpty(isBirthday)
   ) {
-    return res.status(422).json({ errors: "Name is required" });
+    return res.status(422).json({ errors: "All data is required" });
   }
 
   next();

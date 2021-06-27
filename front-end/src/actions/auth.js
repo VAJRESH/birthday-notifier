@@ -44,13 +44,13 @@ export function isPasswordStrong(password) {
 
 export function isValidEmail(email) {
   // https://stackoverflow.com/questions/46841752/javascript-regular-expressions-email-address
-   // eslint-disable-next-line
+  // eslint-disable-next-line
   const regex = /^\w+[\w-+\.]*\@\w+([-\.]\w+)*\.[a-zA-Z]{2,}$/;
   return !regex.test(email) ? "Enter a valid email address." : null;
 }
 
 export function setCookies(key, value) {
-  document.cookie = `${key}=${value}`;
+  document.cookie = `${key}=${value}; path=/; max-age=31536000"`;
 }
 
 export function getCookie(key) {
@@ -71,11 +71,13 @@ export function getCookie(key) {
 }
 
 export function deleteCookie(key) {
-  return (document.cookie = `${key}=; expires=${new Date()};"`);
+  return (document.cookie = `${key}=; expires=${new Date()}; path=/"`);
 }
 
 export function isLoggedIn() {
-  return getCookie("token");
+  const isToken = getCookie("token");
+  console.log(isToken);
+  return !!isToken;
 }
 
 export function logout() {

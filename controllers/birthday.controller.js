@@ -28,6 +28,7 @@ exports.addNewBirthday = (req, res) => {
 
   BirthdayList.findOne({ userId }).exec(async (err, list) => {
     if (err) return res.status(400).json({ error: err });
+    if (!list) return res.status(400).json({ error: 'No List Found' });
 
     if (!req.file) {
       image = "/images/default-avatar.jpg";
@@ -57,7 +58,7 @@ exports.addNewBirthday = (req, res) => {
     list.save((err, data) => {
       if (err) return res.status(400).json({ error: err });
 
-      return res.json({ message: `${data.name} Birthday added` });
+      return res.json({ message: `${newBirthday.name} Birthday added` });
     });
   });
 };

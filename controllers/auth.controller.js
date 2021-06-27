@@ -1,5 +1,5 @@
 const User = require("../models/user.model");
-const BirthdayList = require("../models/birthday.model");
+const {BirthdayList} = require("../models/birthday.model");
 const jwt = require("jsonwebtoken");
 const expressJwt = require("express-jwt");
 
@@ -18,9 +18,12 @@ exports.register = (req, res) => {
         userId: user._id,
         belongsTo: user.name
       });
-      birthdayList.save();
+      birthdayList.save((err, data) => {
+        if (err) return res.status(400).json({ error: err });
+        
+        return res.json({ message: `New User, ${name} is registered. Please login.` });
+      });
 
-      res.json({ message: `New User, ${name} is registered. Please login.` });
     });
   });
 };

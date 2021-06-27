@@ -41,7 +41,7 @@ const BirthdayList = () => {
 
           <div className="lists">
             {list ? (
-              list.map((person) => <Card item={person} />)
+              list.map((person) => <Card item={person} key={person._id} />)
             ) : (
               <>No Birthdays Saved. Add new Birthdays</>
             )}

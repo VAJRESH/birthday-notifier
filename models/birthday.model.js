@@ -23,7 +23,7 @@ const birthdayListSchema = new mongoose.Schema({
 });
 
 const Birthday = mongoose.model("Birthday", birthdaySchema);
-const BirthdayList = mongoose.model("Birthdays", birthdayListSchema);
+const BirthdayList = mongoose.model("BirthdayList", birthdayListSchema);
 
 module.exports = {
   Birthday,
