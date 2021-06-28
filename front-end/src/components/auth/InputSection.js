@@ -5,6 +5,7 @@ const InputSection = ({
   label,
   inputType,
   example,
+  value,
   isNotRequired,
   handleChange,
   errorMessage,
@@ -18,6 +19,7 @@ const InputSection = ({
         placeholder={example}
         className="input"
         name={label}
+        value={value}
         onChange={handleChange}
       />
       <small>{errorMessage}</small>

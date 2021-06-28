@@ -50,7 +50,7 @@ export function isValidEmail(email) {
 }
 
 export function setCookies(key, value) {
-  document.cookie = `${key}=${value}; path=/; max-age=31536000"`;
+  document.cookie = `${key}=${value}; path=/; max-age=31536000`;
 }
 
 export function getCookie(key) {
@@ -76,7 +76,6 @@ export function deleteCookie(key) {
 
 export function isLoggedIn() {
   const isToken = getCookie("token");
-  console.log(isToken);
   return !!isToken;
 }
 

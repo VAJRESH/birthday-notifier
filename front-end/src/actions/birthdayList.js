@@ -48,7 +48,6 @@ function getDateMonthYearIsBirthday(dateOfBirth) {
 export function processDataForSubmission(data) {
   const formData = new FormData();
   const { date, month, year, isBirthday } = getDateMonthYearIsBirthday(data.date);
-  
   formData.append('name', data.name);
   formData.append('gender', data.gender)
   formData.append('date', date)
@@ -64,6 +63,21 @@ export function processDataForSubmission(data) {
 export function addNewBirthday(formData, token) {
   return fetch(`${API}/birthday/add`, {
     method: "POST",
+    headers: {
+      Accept: "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: formData
+  })
+    .then((res) => {
+      return res.json();
+    })
+    .catch((err) => console.log(err));
+}
+
+export function editBirthday(formData, id, token) {
+  return fetch(`${API}/birthday/edit/${id}`, {
+    method: "PUT",
     headers: {
       Accept: "application/json",
       Authorization: `Bearer ${token}`,
