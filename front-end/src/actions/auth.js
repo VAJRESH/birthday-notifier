@@ -71,7 +71,7 @@ export function getCookie(key) {
 }
 
 export function deleteCookie(key) {
-  return (document.cookie = `${key}=; expires=${new Date()}; path=/"`);
+  return (document.cookie = `${key}=; expires=${new Date()}; path=/`);
 }
 
 export function isLoggedIn() {

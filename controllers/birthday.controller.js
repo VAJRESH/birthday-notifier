@@ -28,7 +28,7 @@ exports.addNewBirthday = (req, res) => {
 
   BirthdayList.findOne({ userId }).exec(async (err, list) => {
     if (err) return res.status(400).json({ error: err });
-    if (!list) return res.status(400).json({ error: 'No List Found' });
+    if (!list) return res.status(400).json({ error: "No List Found" });
 
     if (!req.file) {
       image = "/images/default-avatar.jpg";
@@ -125,13 +125,16 @@ exports.deleteBirthday = (req, res) => {
   BirthdayList.findOne({ userId }).exec(async (err, list) => {
     if (err) return res.status(400).json({ error: err });
 
-    list.birthdays.id(req.params.id).remove((removeError, success) => {
+    const birthday = list.birthdays.id(req.params.id);
+    birthday.remove((removeError, success) => {
       if (removeError) return res.status(400).json({ error: removeError });
     });
 
     list
       .save()
-      .then((updatedList) => res.json(updatedList))
+      .then(() =>
+        res.json({ message: `${birthday.name}'s Birthday Deleted` })
+      )
       .catch((err) => res.status(400).json(`Error: ${err}`));
   });
 };

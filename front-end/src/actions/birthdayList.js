@@ -89,3 +89,17 @@ export function editBirthday(formData, id, token) {
     })
     .catch((err) => console.log(err));
 }
+
+export function deleteBirthday(id, token) {
+  return fetch(`${API}/birthday/delete/${id}`, {
+    method: "DELETE",
+    headers: {
+      Accept: "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  })
+    .then((res) => {
+      return res.json();
+    })
+    .catch((err) => console.log(err));
+}
