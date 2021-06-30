@@ -99,6 +99,7 @@ exports.updateImage = (req, res) => {
 
     if (updateImage) {
       if (!req.file) return res.status(400).json({ error: "No file uploaded" });
+      
       const results = await cloudinary.uploader
         .upload(req.file.path)
         .catch((err) => console.log(error, err));

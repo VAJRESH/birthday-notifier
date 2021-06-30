@@ -6,6 +6,24 @@ const month = [
   'May', 'June', 'July', 'August',
   'September', 'October', 'November', 'December'
 ]
+function capitalize(str){
+    return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+function limit(){
+  const d = new Date();
+  let date = d.getDate();
+  let month = d.getMonth()+1;
+  const year = d.getFullYear();
+  if(date<10){
+    date = '0'+date; 
+  }
+  if(month<10){
+    month = '0'+month;
+  }
+  return `${year}-${month}-${date}`;
+}
+
 
 const List = function(props) {
   let buttons;
@@ -55,24 +73,6 @@ const LogOutButton = props => (
       </button>
   </div>
 )
-
-function capitalize(str){
-    return str.charAt(0).toUpperCase() + str.slice(1);
-}
-
-function limit(){
-  const d = new Date();
-  let date = d.getDate();
-  let month = d.getMonth()+1;
-  const year = d.getFullYear();
-  if(date<10){
-    date = '0'+date; 
-  }
-  if(month<10){
-    month = '0'+month;
-  }
-  return `${year}-${month}-${date}`;
-}
 
 export default List;
 export {

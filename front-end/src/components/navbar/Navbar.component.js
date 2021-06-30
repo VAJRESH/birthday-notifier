@@ -12,7 +12,7 @@ const Navbar = (router) => {
     if (router.location.pathname === url) return;
 
     setUrl(router.location.pathname);
-     // eslint-disable-next-line
+    // eslint-disable-next-line
   }, [router]);
 
   return (

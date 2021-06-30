@@ -1,35 +1,19 @@
-import React, { useEffect, useState } from "react";
-import { withRouter } from "react-router";
-import { Link } from "react-router-dom";
-import { getCookie } from "../actions/auth";
+import React, { useState } from "react";
+import { getCookie } from "../../../actions/auth";
 import {
-    editBirthday,
-    processDataForSubmission
-} from "../actions/birthdayList";
-import InputSection from "../components/auth/InputSection";
-import {
-    limit
-} from "../utils/functions_for_components";
+  editBirthday,
+  processDataForSubmission
+} from "../../../actions/birthdayList";
+import { getFormattedDate, limit } from "../../../helpers/utils";
+import InputSection from "../../Inputs/InputSection";
+import "../EditModal.css";
 
-function getFormattedDate(date, month, year) {
-  if (date.toString().length === 1) date = "0" + date;
-  if (month.toString().length === 1) month = "0" + (month + 1);
-  return `${year}-${month}-${date}`;
-}
-
-function useHandleInput(origianlData) {
-  const { name, gender, date, month, year, ...remainingData } = origianlData;
+function useHandleInput(originalData, reloadList, closeModal) {
+  const { name, gender, date, month, year, ...remainingData } = originalData;
 
   const [message, setMessage] = useState("");
   const [birthdayData, setBirthdayData] = useState({
     data: { name, gender, date: getFormattedDate(date, month, year) },
-  });
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setMessage("");
-    }, 2000);
-
-    return () => clearTimeout(timer);
   });
 
   function handleInput(e) {
@@ -48,8 +32,16 @@ function useHandleInput(origianlData) {
     const data = processDataForSubmission(birthdayData.data);
     editBirthday(data, remainingData._id, getCookie("token"))
       .then((res) => {
-        console.log(res);
         setMessage(res ? res.error || res.message : "No response");
+
+        setTimeout(() => {
+          console.log(message.includes("updated"));
+          if (res && res.message.includes("updated")) {
+            closeModal();
+            reloadList();
+          }
+          setMessage("");
+        }, 1000);
       })
       .catch((err) => console.log(err));
   }
@@ -57,17 +49,22 @@ function useHandleInput(origianlData) {
   return { handleInput, handleSubmit, message, data: birthdayData.data };
 }
 
-const EditBirthday = (router) => {
+const EditBirthday = ({ birthdayData, reloadList, closeModal }) => {
   const { handleInput, handleSubmit, message, data } = useHandleInput(
-    router.location.state
+    birthdayData,
+    reloadList,
+    closeModal
   );
+
   return (
-    <div className="main-container">
-      <div className="container">
-        <h3>Enter Details</h3>
-        <Link to={`/list/${localStorage.getItem("name")}`} id="backBtn">
-          Back
-        </Link>
+    <div className="modal-container">
+      <section className="close-modal" onClick={closeModal}>
+        <button className="close-btn">X</button>
+      </section>
+
+      <div className="modal-content">
+        <h3>Edit Details</h3>
+
         <div>{message}</div>
         <form onSubmit={handleSubmit}>
           <InputSection
@@ -108,7 +105,7 @@ const EditBirthday = (router) => {
           <div className="form-group">
             <input
               type="submit"
-              value="Add Birthday"
+              value="Edit Birthday"
               className="btn btn-primary"
             />
           </div>
@@ -118,4 +115,4 @@ const EditBirthday = (router) => {
   );
 };
 
-export default withRouter(EditBirthday);
+export default EditBirthday;

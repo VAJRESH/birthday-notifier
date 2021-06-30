@@ -1,21 +1,24 @@
 /* global level css styles */
-*{
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
+
 body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-      'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-      sans-serif;
+        'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+        sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-} 
-code {
-font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
 }
-a{
+
+code {
+    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+        monospace;
+}
+
+a {
     text-decoration: none;
 }
 
@@ -29,33 +32,38 @@ a{
 }
 
 /* hide a component when not logged in */
-#hideComponent{
+#hideComponent {
     display: none;
 }
 
 /* login and register buttons in some pages container */
-#loginContainer{
+#loginContainer {
     display: grid;
     grid-template-columns: 4fr 1fr 1fr;
 }
-#loginBtn, #registerBtn{
+
+#loginBtn,
+#registerBtn {
     margin: 10px;
     min-height: 35px;
     min-width: 100px;
     border-radius: 10px;
 }
-#loginBtn{
+
+#loginBtn {
     background-color: rgb(95, 255, 74);
 }
-#registerBtn{
+
+#registerBtn {
     background-color: rgb(253, 42, 42)
 }
 
 /* alert box for displaying api working and status */
-.messageContainer{
+.messageContainer {
     display: block;
 }
-.hideMessage{
+
+.hideMessage {
     display: inline;
     margin-left: 10px;
     min-height: 25px;
@@ -67,13 +75,16 @@ a{
     box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.623);
     visibility: hidden;
 }
-.displayMessage{
+
+.displayMessage {
     width: fit-content;
     visibility: visible;
 }
-.errorMessage{
+
+.errorMessage {
     position: absolute;
-    right: 10px; top: -30px;
+    right: 10px;
+    top: -30px;
     border-radius: 10px;
     text-align: left;
     padding: 0px 5px;
@@ -88,20 +99,23 @@ a{
     flex-direction: column;
     align-items: center;
     text-align: center;
-    
+
     position: relative;
     width: 94vw;
     height: 90vh;
     overflow-y: scroll;
     margin: 1rem 3vw;
+    margin-top: 50px;
     background: rgb(255, 255, 255);
     border-radius: 0.25rem;
     padding: 2vw;
-    box-shadow:  0 5px 15px rgba(51, 29, 29, 0.4);
+    box-shadow: 0 5px 15px rgba(51, 29, 29, 0.4);
 }
-.container > *{
+
+.container>* {
     width: 100%;
 }
+
 .container h3 {
     font-size: large;
     font-style: italic;
@@ -109,52 +123,77 @@ a{
     text-transform: none;
     margin-bottom: 1rem;
 }
-.displayCount, .displayLoginStatus, .displayButton{
+
+.displayCount,
+.displayLoginStatus,
+.displayButton {
     display: inline;
     border-radius: 10px;
     padding: 5px 10px;
     margin: 1em;
     background-color: rgba(255, 0, 0, 0.897);
 }
+
 /* search bar and its label on main page */
-.searchBarLabel{
+.searchBarLabel {
     font-style: italic;
     font-weight: bold;
 }
-.filterList{
+
+.filterList {
     outline: transparent;
     border-radius: 10px;
     margin-bottom: 20px;
     padding-left: 5px;
 }
+
 /* container for people's card in main page */
-.lists{
+.lists {
     display: grid;
     grid-template-columns: 45vw 45vw;
 }
+
+.no-list-message {
+    grid-column: 1/4;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+
+    height: 200px;
+    font-weight: 500;
+    font-size: 2rem;
+}
+
 /* container for people's card in edit page */
-.lastEntry{
+.lastEntry {
     width: 100%;
 }
-.deleteBtn, .editBtn{
+
+.deleteBtn,
+.editBtn {
     margin: 10px;
     border: transparent;
     outline: transparent;
     border-radius: 10px;
     box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.527);
 }
-.deleteBtn{
+
+.deleteBtn {
     padding: 8px;
     background-color: rgb(255, 50, 50);
 }
-.editBtn{
+
+.editBtn {
     padding: 8px 10px;
     background-color: rgb(255, 240, 29);
     box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.527);
 }
 
 /* buttons for navigation in some pages */
-.addBtn, #backBtn{
+.addBtn,
+#backBtn {
     color: white;
     display: block;
     width: 100%;
@@ -167,23 +206,26 @@ a{
     border-radius: 10px;
     cursor: pointer;
 }
-#backBtn{
+
+#backBtn {
     margin-bottom: 1em;
     background: rgb(252, 30, 30);
 }
 
 /* form container on some pages */
-.form-group{
+.form-group {
     display: grid;
     grid-template-columns: 40vw auto;
     height: 20px;
     margin: 2em 0;
     position: relative;
 }
-.form-group label{
+
+.form-group label {
     font-weight: 500;
 }
-.form-group .input{
+
+.form-group .input {
     grid-column: 2;
     right: 0;
     display: inline;
@@ -191,7 +233,8 @@ a{
     outline: transparent;
     border-radius: 10px;
 }
-.form-group input[type="submit"]{
+
+.form-group input[type="submit"] {
     grid-column: 1/4;
     color: white;
     display: block;
@@ -205,25 +248,31 @@ a{
     cursor: pointer;
 }
 
-/* Hover Style */ 
-h4:hover{
+/* Hover Style */
+h4:hover {
     color: aqua;
 }
-p > span:hover{
+
+p>span:hover {
     background-color: aqua;
 }
-button:hover{
+
+button:hover {
     color: black;
     transform: scale(1.025);
 }
-.input:active, .input:hover, .input:focus{
+
+.input:active,
+.input:hover,
+.input:focus {
     color: white;
     background-color: rgb(53, 40, 40);
 }
 
 /* css style if the screen width is greater than 750px */
-@media only screen and (min-width: 750px){
-/* black background of every page */
+@media only screen and (min-width: 750px) {
+
+    /* black background of every page */
     .main-container {
         display: flex;
         flex-direction: column;
@@ -232,55 +281,66 @@ button:hover{
         justify-content: center;
     }
 
-/* login and register buttons in some pages container */
-    #loginContainer{
+    /* login and register buttons in some pages container */
+    #loginContainer {
         display: flex;
     }
-/* alert box for displaying api working and status */
-    .errorMessage{
+
+    /* alert box for displaying api working and status */
+    .errorMessage {
         position: absolute;
         right: 15vw;
         text-align: center;
     }
 
-/* white container in all pages */
+    /* white container in all pages */
     .container {
         max-width: 85vw;
         height: 80vh;
     }
+
     .container h3 {
         margin-bottom: 10px;
     }
-    .info{
+
+    .info {
         display: flex;
         align-content: space-evenly;
         height: 30px;
         margin: auto;
     }
-    .displayCount, .displayLoginStatus{
+
+    .displayCount,
+    .displayLoginStatus {
         margin: auto;
     }
-    .lists{
+
+    .lists {
         display: grid;
         grid-template-columns: auto auto auto;
     }
-    .addBtn, #back-btn{
+
+    .addBtn,
+    #back-btn {
         margin: 2rem auto 2rem auto;
     }
-    .hideMessage{
+
+    .hideMessage {
         position: absolute;
-        top: 2%; right: 2%;
+        top: 2%;
+        right: 2%;
         padding: 0 10px;
     }
-    .form-group{
+
+    .form-group {
         display: grid;
         grid-template-columns: 30% 70%;
         margin: 1em auto;
         text-align: center;
         font-size: 1.2rem;
     }
-    
-    .form-group .input{
+
+    .form-group .input {
         display: inline;
         padding: 0 10px;
         margin: auto;
@@ -290,11 +350,129 @@ button:hover{
 
 
 /* register page */
-.heading{
+.heading {
     margin: 10px auto;
 }
-.redirect-link{
+
+.redirect-link {
     font-style: italic;
     font-weight: 600;
     margin: 10px auto;
+}
+
+
+/* home page */
+.app-name {
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
+.tagline {
+    font-size: 1.2rem;
+    font-style: italic;
+
+}
+
+.service-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+
+    margin: 30px auto;
+}
+
+.service-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+
+    width: 200px;
+    min-height: 170px;
+    padding: 0 20px;
+    margin: 10px;
+    border: 1px solid skyblue;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 255, 0.795), 5px 5px 10px rgba(135, 207, 235, 0.795);
+}
+
+.service-card>div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    height: 100px;
+    width: 100px;
+    margin: 10px auto;
+    border-radius: 100%;
+    background-color: rgb(160, 228, 255);
+    overflow: hidden;
+}
+
+.cta {
+    margin: 10px auto 20px;
+    width: fit-content;
+    color: black;
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: 5px solid #00a1ff;
+    font-weight: 500;
+    font-size: 1.3rem;
+}
+
+.cta a {
+    color: inherit;
+}
+
+.feedback-form {
+    display: grid;
+    grid-template-columns: auto auto;
+    justify-content: center;
+
+    padding: 10px 0;
+}
+
+.form-section {
+    position: relative;
+    margin: 20px auto;
+}
+
+.form-section:nth-child(3) {
+    grid-column: 1/3;
+    margin-bottom: 10px;
+}
+
+.form-section>label {
+    display: none;
+}
+
+.form-section>input {
+    width: 24vw;
+}
+
+.feedback-input {
+    border: transparent;
+    outline: transparent;
+    border-bottom: 2px solid;
+    padding: 0 5px;
+    margin: auto 1vw;
+}
+
+.feedback-input:not(:placeholder-shown)~.feedback-label {
+    display: inline-block;
+
+    position: absolute;
+    top: -20px;
+    left: -5px;
+}
+
+textarea {
+    width: 50vw;
+}
+
+.portfolio-link a{
+    color: white;
+}
+
+.portfolio-link a:hover{
+    color: #00a1ff;
 }

@@ -7,7 +7,7 @@ import {
   isValidName,
   register,
 } from "../actions/auth";
-import InputSection from "../components/auth/InputSection";
+import InputSection from "../components/Inputs/InputSection";
 
 // validates all the input and generate appropriate messages
 function useHandleInputs(history) {
@@ -21,7 +21,7 @@ function useHandleInputs(history) {
 
   useEffect(() => {
     if (isLoggedIn()) return history.push("/user/logout");
-     // eslint-disable-next-line
+    // eslint-disable-next-line
   }, []);
 
   function handleName(e) {

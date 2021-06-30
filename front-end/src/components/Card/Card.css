@@ -2,14 +2,14 @@
 .person {
     display: inline-grid;
     grid-template-rows: auto auto auto;
-    
+
     position: relative;
     min-width: 40vw;
     width: 90%;
     margin: 1vw;
     border: 1px solid red;
     border-radius: 10px;
-    
+
     cursor: default;
     box-shadow: 0 5px 15px rgba(51, 29, 29, 0.4);
     transition: transform .2s;
@@ -44,7 +44,7 @@
 
 .actions {
     display: none;
-    
+
     position: absolute;
     top: 30px;
     right: 10px;
@@ -57,22 +57,24 @@
     margin: 0;
     border: 1px solid rgb(110, 110, 110);
 }
+
 .action-btns>* {
     display: block;
-    
+
     width: 100%;
     background-color: transparent;
     border: 0px transparent;
     outline: 0px transparent;
     color: #000;
     padding: 5px;
-    
+
     font-size: 1rem;
     word-spacing: normal;
     font-weight: 500;
     font-family: Arial, Helvetica, sans-serif;
 }
-.action-btns>*:hover{
+
+.action-btns>*:hover {
     background-color: rgb(207, 206, 206);
     color: #000;
 }
@@ -95,13 +97,13 @@
 #true {
     display: inline-block;
     visibility: visible;
-    
+
     padding: 0px 5px 2px;
     margin: 5px;
     border-radius: 10px;
     background-color: rgb(251, 255, 0);
     color: rgb(255, 0, 0);
-    
+
     font-size: large;
     font-weight: 500;
     word-spacing: 2px;
@@ -117,7 +119,7 @@
     width: 100px;
     height: 100px;
     object-fit: cover;
-    
+
     margin: 10px auto;
     border-radius: 50%;
     text-align: center;
@@ -144,14 +146,14 @@
 
 section>p {
     display: inline-block;
-    
+
     padding: 0px 5px;
     margin: 10px 5px;
-    
+
     background-color: rgba(0, 162, 255, 0.3);
     border-radius: 10px;
     color: rgb(38, 0, 255);
-    
+
     word-spacing: 2px;
     transition: 0.5s;
     box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.527);

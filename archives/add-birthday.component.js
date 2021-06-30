@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { capitalize, DisplayMessage, limit } from '../utils/functions_for_components';
+import { capitalize, DisplayMessage, limit } from '../front-end/src/utils/functions_for_components';
 
 export default class AddBirthday extends Component {
     constructor(props){

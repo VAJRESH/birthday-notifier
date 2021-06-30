@@ -1,4 +1,4 @@
-.nav-container{
+.nav-container {
     display: flex;
     justify-content: space-between;
 
@@ -12,6 +12,7 @@
     background-color: #fff;
     z-index: 10;
 }
-.nav-link{
+
+.nav-link {
     margin: auto 10px;
 }

@@ -1,24 +1,65 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { getListOfUser, deleteBirthday } from "../actions/birthdayList";
 import { getCookie } from "../actions/auth";
+import {
+  deleteBirthday,
+  getListOfUser,
+  updateImage,
+} from "../actions/birthdayList";
 import Card from "../components/Card/Card";
-import "../css/container.css";
 import ToastMessage from "../components/ToastMessage/ToastMessage.component";
+import "../css/container.css";
 
 function useHandleActions() {
   const [list, setList] = useState([]);
+  const [query, setQuery] = useState("");
   const [message, setMessage] = useState();
+  const [isAuth, setIsAuth] = useState(false);
+
+  useEffect(() => {
+    // checks if the list belongs to the user for crud actions
+    const userName = localStorage.getItem("name");
+    if (userName) {
+      const url = window.location.pathname.split("/");
+      const birthdayListUser = url[url.length - 1];
+
+      setIsAuth(userName === birthdayListUser);
+    }
+  }, []);
 
   useEffect(() => {
     loadBirthdayList();
   }, []);
+
+  function reloadList() {
+    loadBirthdayList();
+  }
+
+  function filterList(e) {
+    console.log(e.target.value);
+    setQuery(e.target.value.toLowerCase());
+  }
 
   function loadBirthdayList() {
     const url = window.location.pathname.split("/");
     const user = url[url.length - 1];
     getListOfUser(user)
       .then((data) => setList(data.birthdays))
+      .catch((err) => console.log(err));
+  }
+
+  function removeImage(birthdayId) {
+    const formData = new FormData();
+    updateImage(birthdayId, formData, getCookie("token"))
+      .then((res) => {
+        console.log(res);
+        setMessage(res ? res.error || res.message : "No response");
+        reloadList();
+
+        setTimeout(() => {
+          setMessage("");
+        }, 1000);
+      })
       .catch((err) => console.log(err));
   }
 
@@ -36,17 +77,35 @@ function useHandleActions() {
       });
     }
   }
-  return { list, message, handleDelete };
+  return {
+    isAuth,
+    list,
+    query,
+    message,
+    filterList,
+    reloadList,
+    handleDelete,
+    removeImage,
+  };
 }
 
 const BirthdayList = () => {
-  const { list, message, handleDelete } = useHandleActions();
+  const {
+    isAuth,
+    list,
+    query,
+    message,
+    reloadList,
+    handleDelete,
+    filterList,
+    removeImage,
+  } = useHandleActions();
 
   return (
     <div className="App">
       <main className="main-container">
         <ToastMessage message={message} />
-        
+
         <section className="container">
           <h3>Birthdays</h3>
 
@@ -60,25 +119,29 @@ const BirthdayList = () => {
 
           <div className="filters">
             <label className="searchBarLabel">Search: </label>
-            <input
-              className="filterList"
-              //   value={this.state.search}
-              type="text"
-              //   onChange={this.onChangeInput}
-            />
+            <input className="filterList" type="text" onChange={filterList} />
           </div>
 
           <div className="lists">
-            {list ? (
-              list.map((person) => (
-                <Card
-                  item={person}
-                  key={person._id}
-                  handleDelete={handleDelete}
-                />
-              ))
+            {list.length !== 0 ? (
+              list
+                .filter((person) => person.name.toLowerCase().includes(query))
+                .map((person) => (
+                  <Card
+                    item={person}
+                    isAuth={isAuth}
+                    handleEvents={{
+                      reloadList,
+                      handleDelete,
+                      removeImage,
+                    }}
+                    key={person._id}
+                  />
+                ))
             ) : (
-              <>No Birthdays Saved. Add new Birthdays</>
+              <div className="no-list-message">
+                No Birthdays Saved. <br /> Add new Birthdays
+              </div>
             )}
           </div>
         </section>

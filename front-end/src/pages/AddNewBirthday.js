@@ -1,16 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { getCookie } from "../actions/auth";
 import {
   addNewBirthday,
-  processDataForSubmission,
+  processDataForSubmission
 } from "../actions/birthdayList";
-import InputSection from "../components/auth/InputSection";
+import ImageUpload from "../components/Inputs/ImageUpload/ImageUpload";
+import InputSection from "../components/Inputs/InputSection";
 import ToastMessage from "../components/ToastMessage/ToastMessage.component";
-import { limit } from "../utils/functions_for_components";
+import { limit } from "../helpers/utils";
 
 function useHandleInput() {
   const [message, setMessage] = useState("");
+  const [imagePreview, setImagePreview] = useState(null);
   const [birthdayData, setBirthdayData] = useState({
     data: { gender: "Male" },
   });
@@ -20,6 +22,12 @@ function useHandleInput() {
     const data = birthdayData.data;
     const name = e.target.name.toLowerCase();
     data[name] = name === "image" ? e.target.files[0] : e.target.value;
+
+    if (name === "image" && e.target.files[0]) {
+      setImagePreview(URL.createObjectURL(e.target.files[0]));
+    } else {
+      setImagePreview(null);
+    }
 
     setBirthdayData({ data });
   }
@@ -38,11 +46,18 @@ function useHandleInput() {
       .catch((err) => console.log(err));
   }
 
-  return { data: birthdayData.data, handleInput, handleSubmit, message };
+  return {
+    data: birthdayData.data,
+    handleInput,
+    handleSubmit,
+    message,
+    imagePreview,
+  };
 }
 
 const AddNewBirthday = () => {
-  const { data, handleInput, handleSubmit, message } = useHandleInput();
+  const { data, handleInput, handleSubmit, message, imagePreview } =
+    useHandleInput();
   return (
     <div className="main-container">
       <ToastMessage message={message} />
@@ -83,13 +98,7 @@ const AddNewBirthday = () => {
             />
           </div>
 
-          <InputSection
-            label="Image"
-            inputType="file"
-            isNotRequired
-            value={data.image}
-            handleChange={handleInput}
-          />
+          <ImageUpload handleChange={handleInput} imagePreview={imagePreview} />
 
           <div className="form-group">
             <input

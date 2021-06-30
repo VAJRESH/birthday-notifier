@@ -20,8 +20,15 @@
     top: 30px;
     left: 50%;
     transform: translateX(-50%);
-    
+
     margin-top: 5px;
     font-size: 1rem;
     color: red;
+}
+
+@media only screen and (max-width: 625px) {
+    .input-section .input {
+        width: 100%;
+    }
+
 }

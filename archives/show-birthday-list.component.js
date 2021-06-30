@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import '../css/container.css';
 import axios from 'axios';
-import List, { DisplayMessage } from '../utils/functions_for_components';
+import List, { DisplayMessage } from './utils/functions_for_components';
 
 function getAge(data){
     const currentYear = new Date().getFullYear();

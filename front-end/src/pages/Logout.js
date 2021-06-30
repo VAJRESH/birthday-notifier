@@ -8,7 +8,6 @@ function useLogout(history) {
 
   useEffect(() => {
     if (!isLoggedIn()) return history.push("/user/login");
-    
   }, [history]);
 
   function handleLogout(e) {

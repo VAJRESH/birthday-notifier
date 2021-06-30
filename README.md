@@ -21,6 +21,9 @@ front end
 - home page
 - portfolio link/about me section
 
+## Addon Features
+- Feed back and suggestion form
+- user profile
 
 ## Technologies And Support
 - [Mongodb](https://www.mongodb.com/3) as Database.

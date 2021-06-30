@@ -1,4 +1,5 @@
 import { DEV_BACKEND_URL, ENV } from "../config";
+import { capitalize } from "../helpers/utils";
 
 const API = ENV === "DEVELOPMENT" ? DEV_BACKEND_URL : URL;
 
@@ -24,15 +25,15 @@ function getDateMonthYearIsBirthday(dateOfBirth) {
   const birthYear = dob.getFullYear();
   const birthMonth = dob.getMonth();
   const birthDate = dob.getDate();
-  
+
   const currentYear = date.getFullYear();
   const currentMonth = date.getMonth();
   const currentDate = date.getDate();
 
-  if(
-      birthYear===currentYear && 
-      birthMonth === currentMonth &&
-      birthDate === currentDate
+  if (
+    birthYear === currentYear &&
+    birthMonth === currentMonth &&
+    birthDate === currentDate
   ) {
     isBirthday = true;
   }
@@ -41,21 +42,23 @@ function getDateMonthYearIsBirthday(dateOfBirth) {
     date: birthDate,
     month: birthMonth,
     year: birthYear,
-    isBirthday
-  }
+    isBirthday,
+  };
 }
 
 export function processDataForSubmission(data) {
   const formData = new FormData();
-  const { date, month, year, isBirthday } = getDateMonthYearIsBirthday(data.date);
-  formData.append('name', data.name);
-  formData.append('gender', data.gender)
-  formData.append('date', date)
-  formData.append('month', month)
-  formData.append('year', year)
-  formData.append('isBirthday', isBirthday)
+  const { date, month, year, isBirthday } = getDateMonthYearIsBirthday(
+    data.date
+  );
+  formData.append("name", capitalize(data.name));
+  formData.append("gender", data.gender);
+  formData.append("date", date);
+  formData.append("month", month);
+  formData.append("year", year);
+  formData.append("isBirthday", isBirthday);
 
-  if (data.image) formData.append('image', data.image);
+  if (data.image) formData.append("image", data.image);
 
   return formData;
 }
@@ -67,7 +70,7 @@ export function addNewBirthday(formData, token) {
       Accept: "application/json",
       Authorization: `Bearer ${token}`,
     },
-    body: formData
+    body: formData,
   })
     .then((res) => {
       return res.json();
@@ -82,7 +85,7 @@ export function editBirthday(formData, id, token) {
       Accept: "application/json",
       Authorization: `Bearer ${token}`,
     },
-    body: formData
+    body: formData,
   })
     .then((res) => {
       return res.json();
@@ -97,6 +100,21 @@ export function deleteBirthday(id, token) {
       Accept: "application/json",
       Authorization: `Bearer ${token}`,
     },
+  })
+    .then((res) => {
+      return res.json();
+    })
+    .catch((err) => console.log(err));
+}
+
+export function updateImage(id, formData, token) {
+  return fetch(`${API}/birthday/image/update/${id}`, {
+    method: "PUT",
+    headers: {
+      Accept: "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: formData,
   })
     .then((res) => {
       return res.json();

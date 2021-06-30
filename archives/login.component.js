@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import { DisplayMessage, LogOutButton } from '../utils/functions_for_components';
+import { DisplayMessage, LogOutButton } from '../front-end/src/utils/functions_for_components';
 
 export default class Register extends Component {
     constructor(props){
