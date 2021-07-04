@@ -1,0 +1,467 @@
+/* global level css styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+        'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+        sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+        monospace;
+}
+
+a {
+    text-decoration: none;
+}
+
+/* black background of every page */
+.main-container {
+    position: relative;
+    height: 100vh;
+    width: 100vw;
+    padding: 5px 0px;
+    background-color: rgb(34, 49, 44);
+}
+
+
+/* white container in all pages */
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+
+    position: relative;
+    width: 94vw;
+    height: 90vh;
+    overflow-y: scroll;
+    margin: 1rem 3vw;
+    margin-top: 50px;
+    background: rgb(255, 255, 255);
+    border-radius: 0.25rem;
+    padding: 2vw;
+    box-shadow: 0 5px 15px rgba(51, 29, 29, 0.4);
+}
+
+.container>* {
+    width: 100%;
+}
+
+.container h3 {
+    font-size: large;
+    font-style: italic;
+    font-weight: 600;
+    text-transform: none;
+    margin-bottom: 1rem;
+}
+
+.fas{
+    font-size: 3rem;
+}
+
+.displayCount,
+.displayLoginStatus,
+.displayButton {
+    display: inline;
+    border-radius: 10px;
+    padding: 5px 10px;
+    margin: 1em;
+    background-color: rgba(255, 0, 0, 0.897);
+}
+
+/* search bar and its label on main page */
+.searchBarLabel {
+    font-style: italic;
+    font-weight: bold;
+}
+
+.filterList {
+    outline: transparent;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    padding-left: 5px;
+}
+
+/* container for people's card in main page */
+.lists {
+    display: grid;
+    grid-template-columns: 45vw 45vw;
+}
+
+.no-list-message {
+    grid-column: 1/4;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+
+    height: 200px;
+    font-weight: 500;
+    font-size: 2rem;
+}
+
+/* container for people's card in edit page */
+.lastEntry {
+    width: 100%;
+}
+
+.deleteBtn,
+.editBtn {
+    margin: 10px;
+    border: transparent;
+    outline: transparent;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.527);
+}
+
+.deleteBtn {
+    padding: 8px;
+    background-color: rgb(255, 50, 50);
+}
+
+.editBtn {
+    padding: 8px 10px;
+    background-color: rgb(255, 240, 29);
+    box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.527);
+}
+
+/* buttons for navigation in some pages */
+.addBtn,
+#btn-danger {
+    color: white;
+    display: block;
+    width: 250px;
+    border-color: transparent;
+    background: rgb(30, 255, 0);
+    margin: 1rem auto;
+    text-transform: capitalize;
+    font-size: 1.2rem;
+    padding: 10px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+#btn-danger {
+    margin-bottom: 1em;
+    background: rgb(252, 30, 30);
+}
+
+/* form container on some pages */
+.form-group {
+    display: grid;
+    grid-template-columns: 40vw auto;
+    height: 20px;
+    margin: 2em 0;
+    position: relative;
+}
+
+.form-group label {
+    font-weight: 500;
+}
+
+.form-group .input {
+    grid-column: 2;
+    right: 0;
+    display: inline;
+    width: 150px;
+    outline: transparent;
+    border-radius: 10px;
+}
+
+.form-group input[type="submit"] {
+    grid-column: 1/4;
+    color: white;
+    display: block;
+    width: 250px;
+    border-color: transparent;
+    background: rgb(30, 255, 0);
+    text-transform: capitalize;
+    font-size: 1.2rem;
+    margin: auto;
+    padding: 10px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+input:disabled {
+    background: rgb(122, 122, 122) !important;
+    cursor: not-allowed !important;
+}
+
+/* Hover Style */
+h4:hover {
+    color: aqua;
+}
+
+p>span:hover {
+    background-color: aqua;
+}
+
+button:hover {
+    color: black;
+    transform: scale(1.025);
+}
+
+.input:active,
+.input:hover,
+.input:focus {
+    color: white;
+    background-color: rgb(53, 40, 40);
+}
+
+/* css style if the screen width is greater than 750px */
+@media only screen and (min-width: 750px) {
+
+    /* black background of every page */
+    .main-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        justify-content: center;
+    }
+
+    /* login and register buttons in some pages container */
+    #loginContainer {
+        display: flex;
+    }
+
+    /* alert box for displaying api working and status */
+    .errorMessage {
+        position: absolute;
+        right: 15vw;
+        text-align: center;
+    }
+
+    /* white container in all pages */
+    .container {
+        max-width: 85vw;
+        height: 80vh;
+    }
+
+    .container h3 {
+        margin-bottom: 10px;
+    }
+
+    .info {
+        display: flex;
+        align-content: space-evenly;
+        height: 30px;
+        margin: auto;
+    }
+
+    .displayCount,
+    .displayLoginStatus {
+        margin: auto;
+    }
+
+    .lists {
+        display: grid;
+        grid-template-columns: auto auto auto;
+    }
+
+    .addBtn,
+    #back-btn {
+        margin: 2rem auto 2rem auto;
+    }
+
+    .hideMessage {
+        position: absolute;
+        top: 2%;
+        right: 2%;
+        padding: 0 10px;
+    }
+
+    .form-group {
+        display: grid;
+        grid-template-columns: 30% 70%;
+        margin: 1em auto;
+        text-align: center;
+        font-size: 1.2rem;
+    }
+
+    .form-group .input {
+        display: inline;
+        padding: 0 10px;
+        margin: auto;
+    }
+}
+
+
+
+/* register page */
+.heading {
+    margin: 10px auto;
+}
+
+.message-info, .message-danger {
+    font-style: italic;
+    font-weight: 600;
+    margin: 20px auto;
+}
+.message-danger{
+    color: red;
+}
+
+
+/* home page */
+.app-name {
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
+.tagline {
+    font-size: 1.2rem;
+    font-style: italic;
+
+}
+
+.service-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+
+    margin: 30px auto;
+}
+
+.service-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+
+    width: 200px;
+    min-height: 170px;
+    padding: 0 20px;
+    margin: 10px;
+    border: 1px solid skyblue;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 255, 0.795), 5px 5px 10px rgba(135, 207, 235, 0.795);
+}
+
+.service-card>div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    height: 100px;
+    width: 100px;
+    margin: 10px auto;
+    border-radius: 100%;
+    background-color: rgb(160, 228, 255);
+    overflow: hidden;
+}
+
+.cta {
+    margin: 10px auto 20px;
+    width: fit-content;
+    color: black;
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: 5px solid #00a1ff;
+    font-weight: 500;
+    font-size: 1.3rem;
+}
+.cta:hover{
+    background-color: #00a1ff;
+
+}
+.cta a {
+    color: inherit;
+}
+
+.feedback-form {
+    display: grid;
+    grid-template-columns: auto auto;
+    justify-content: center;
+
+    padding: 10px 0;
+}
+
+.form-section {
+    position: relative;
+    margin: 20px auto;
+}
+
+.form-section:nth-child(3),
+.form-section:nth-child(4),
+.form-section:nth-child(5) {
+    grid-column: 1/3;
+    margin-bottom: 10px;
+}
+
+.form-section:nth-child(4) {
+    margin: 0 auto;
+    min-height: 20px;
+}
+
+.submit-button {
+    background-color: #fff;
+    border: 2px solid;
+    color: #000;
+    padding: 5px 10px;
+    font-size: 1.2rem;
+    width: fit-content;
+}
+
+.submit-button:hover {
+    border-color: transparent;
+    outline-color: transparent;
+    background-color: rgb(27, 27, 27);
+    color: #fff;
+}
+
+.form-section>label {
+    display: none;
+}
+
+.form-section>input {
+    width: 24vw;
+}
+
+.feedback-input {
+    border: transparent;
+    outline: transparent;
+    border-bottom: 2px solid;
+    padding: 0px 5px 2px;
+    margin: auto 1vw;
+}
+
+.feedback-input:not(:placeholder-shown)~.feedback-label {
+    display: inline-block;
+
+    position: absolute;
+    top: -20px;
+    left: -5px;
+}
+
+textarea {
+    width: 50vw;
+}
+
+.portfolio-link a {
+    color: white;
+}
+
+.portfolio-link a:hover {
+    color: #00a1ff;
+}
+
+.btn-danger{
+    grid-column: 1/3;
+    border: transparent;
+    outline: transparent;
+    padding: 10px;
+    margin: auto;
+    color: white;
+    font-size: 1.2rem;
+    font-weight: 500;
+}

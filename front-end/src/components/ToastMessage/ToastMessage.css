@@ -1,0 +1,14 @@
+.toast-box {
+    position: absolute;
+    top: 60px;
+    right: 10px;
+
+    padding: 5px;
+    background-color: rgb(193, 237, 255);
+    border: 1px solid;
+
+    letter-spacing: 1px;
+    font-style: italic;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    z-index: 20;
+}
