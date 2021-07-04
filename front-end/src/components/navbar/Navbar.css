@@ -16,3 +16,49 @@
 .nav-link {
     margin: auto 10px;
 }
+/* 
+.nav-items>div {
+    display: flex;
+    align-items: center;
+
+    position: relative;
+    height: 100%;
+}
+
+.menu-icon {
+    position: relative;
+    width: 30px;
+}
+
+.menu-icon,
+.menu-icon::after,
+.menu-icon::before {
+    background-color: #000;
+    height: 5px;
+    border-radius: 50px;
+}
+
+.menu-icon::before,
+.menu-icon::after {
+    content: '';
+    display: block;
+    position: absolute;
+    top: -10px;
+    width: 30px;
+}
+
+.menu-icon::after {
+    top: 10px;
+}
+
+.menu-links {
+    /* display: none; *
+    position: absolute;
+    border: 1px solid;
+    width: 150px;
+    display: flex;
+    flex-direction: column;
+    right: -2px;
+    top: -2px;
+    background-color: #fff;
+} */

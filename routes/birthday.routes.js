@@ -29,6 +29,7 @@ let router = express.Router();
 // controller
 const {
   getUserBirthdayList,
+  updateList,
   addNewBirthday,
   editBirthday,
   updateImage,
@@ -41,7 +42,9 @@ const { validateDetails } = require("../validators/birthday.validator");
 
 // routes
 router.get("/list/:user", getUserBirthdayList);
-
+router.put("/list", updateList);
+router.delete("/delete/:id", requireLogin, deleteBirthday);
+router.put("/edit/:id", upload.single("image"), requireLogin, editBirthday);
 router.post(
   "/add",
   upload.single("image"),
@@ -49,18 +52,12 @@ router.post(
   requireLogin,
   addNewBirthday
 );
-router.put("/edit/:id", upload.single("image"), requireLogin, editBirthday);
 router.put(
   "/image/update/:id",
   upload.single("image"),
   requireLogin,
   updateImage
 );
-router.delete("/delete/:id", requireLogin, deleteBirthday);
 
-// // login protected route
-// router.get("/secret", requireLogin, (req, res) => {
-//   res.json({ user: req.user });
-// });
 
 module.exports = router;

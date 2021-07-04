@@ -9,6 +9,7 @@ import {
 import Card from "../components/Card/Card";
 import ToastMessage from "../components/ToastMessage/ToastMessage.component";
 import "../css/container.css";
+import { getLastNameFromUrl } from "../helpers/utils";
 
 function useHandleActions() {
   const [list, setList] = useState([]);
@@ -20,8 +21,7 @@ function useHandleActions() {
     // checks if the list belongs to the user for crud actions
     const userName = localStorage.getItem("name");
     if (userName) {
-      const url = window.location.pathname.split("/");
-      const birthdayListUser = url[url.length - 1];
+      const birthdayListUser = getLastNameFromUrl();
 
       setIsAuth(userName === birthdayListUser);
     }
@@ -36,15 +36,38 @@ function useHandleActions() {
   }
 
   function filterList(e) {
-    console.log(e.target.value);
     setQuery(e.target.value.toLowerCase());
   }
 
   function loadBirthdayList() {
-    const url = window.location.pathname.split("/");
-    const user = url[url.length - 1];
+    const user = getLastNameFromUrl();
     getListOfUser(user)
-      .then((data) => setList(data.birthdays))
+      .then((data) => {
+        let lists = [],
+          newDate = new Date(),
+          year,
+          bdate;
+
+        data.birthdays.forEach((bd) => {
+          year = newDate.getFullYear();
+          bdate = new Date(year, bd.month, bd.date);
+
+          if (bdate.getTime() < newDate.getTime()) {
+            if (
+              !(
+                bdate.getMonth() === newDate.getMonth() &&
+                bdate.getDate() === newDate.getDate()
+              )
+            ) {
+              bdate.setFullYear(year + 1);
+            }
+          }
+          bd.order = bdate.getTime() - newDate.getTime();
+
+          lists.push(bd);
+        });
+        setList(lists);
+      })
       .catch((err) => console.log(err));
   }
 
@@ -52,7 +75,6 @@ function useHandleActions() {
     const formData = new FormData();
     updateImage(birthdayId, formData, getCookie("token"))
       .then((res) => {
-        console.log(res);
         setMessage(res ? res.error || res.message : "No response");
         reloadList();
 
@@ -69,7 +91,6 @@ function useHandleActions() {
     );
     if (confirmDelete) {
       deleteBirthday(birthday._id, getCookie("token")).then((res) => {
-        console.log(res);
         if (res.error) return console.log(res.err);
 
         setMessage(res.message);
@@ -125,6 +146,7 @@ const BirthdayList = () => {
           <div className="lists">
             {list.length !== 0 ? (
               list
+                .sort((bd1, bd2) => bd1.order - bd2.order)
                 .filter((person) => person.name.toLowerCase().includes(query))
                 .map((person) => (
                   <Card

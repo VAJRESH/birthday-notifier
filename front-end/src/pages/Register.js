@@ -56,6 +56,7 @@ function useHandleInputs(history) {
         ...message,
         success: response ? response.error || response.message : "No response",
       });
+
       if (!response) return;
       if (response.error === "Email is taken" || response.message) {
         setTimeout(() => {
@@ -105,9 +106,15 @@ const Register = ({ history }) => {
           handleChange={handlePassword}
           errorMessage={message.password}
         />
-
+        <div className="message-danger">
+          You can delete your account after registration if you want
+        </div>
         <div className="form-group">
           <input type="submit" value="Register" />
+        </div>
+        <div className="message-info">
+          If you want the experience without registering, go to login page and
+          login with demo account.
         </div>
       </form>
     </div>

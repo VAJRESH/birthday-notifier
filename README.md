@@ -5,25 +5,22 @@
 
 ## General Info
 - Birthday Notifier is a responsive website. You can visit it [here](https://birthday-notifier00.herokuapp.com/).
+- User can register on the website and login from multiple devices.
+- User can then manage their list of birthdays.
 - Once logged in, perform basic [CRUD actions](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete) like adding, deleting, editing entries.
 - The entries get sorted according to the latest upcoming birthdays.
-- A 'Happy Birthday!!' message is displayed if someones birthday is today after pressing on update list button that day. I planned to do this staff automatic but [heroku](https://en.wikipedia.org/wiki/Heroku) doesn't support cron jobs from my files and since I didn't add card details I can't add [heroku addons](https://devcenter.heroku.com/articles/add-ons).
+- A 'Happy Birthday!!' message is displayed if someones birthday is on that day.
+- Email message will be send to the registered email at 00:00 on the day of birthday from anyone in the list.  
+- If you dont want to register but have experience of the website you can use the demo account.
+  - Email: demo@birthday.notifier.app
+  - Password: Demo@isSecured
+
 
 ## Task and Progress
-back end
-- email system
-- delete account
-
-front end
-- auto sort birthday list
-- edit birthday
-- delete birthday
-- home page
-- portfolio link/about me section
+- Deploy it and set the scheduler.
 
 ## Addon Features
-- Feed back and suggestion form
-- user profile
+- 
 
 ## Technologies And Support
 - [Mongodb](https://www.mongodb.com/3) as Database.

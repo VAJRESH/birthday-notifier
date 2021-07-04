@@ -57,3 +57,35 @@ export function getFormattedDate(date, month, year) {
   if (month.toString().length === 1) month = "0" + (month + 1);
   return `${year}-${month}-${date}`;
 }
+
+export function getLastNameFromUrl() {
+  const url = window.location.pathname.split("/");
+  const user = url[url.length - 1];
+
+  return user;
+}
+
+export function getDateMonthYearIsBirthday(dateOfBirth) {
+  const dob = new Date(dateOfBirth);
+  const date = new Date();
+  let isBirthday = false;
+
+  const birthYear = dob.getFullYear();
+  const birthMonth = dob.getMonth();
+  const birthDate = dob.getDate();
+
+  const currentYear = date.getFullYear();
+  const currentMonth = date.getMonth();
+  const currentDate = date.getDate();
+
+  if (birthMonth === currentMonth && birthDate === currentDate) {
+    isBirthday = true;
+  }
+
+  return {
+    date: birthDate,
+    month: birthMonth,
+    year: birthYear,
+    isBirthday,
+  };
+}

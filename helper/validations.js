@@ -1,4 +1,6 @@
 exports.isPasswordLong = (password, length) => {
+  if (!password) return false;
+
   return password.length >= length;
 };
 
@@ -10,5 +12,7 @@ exports.isValidEmail = (email) => {
 };
 
 exports.isEmpty = (value) => {
+  if (!value) return false;
+
   return !value.trim();
 };

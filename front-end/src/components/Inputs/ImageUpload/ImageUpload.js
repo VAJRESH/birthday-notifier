@@ -4,12 +4,12 @@ import "./ImageUpload.css";
 const ImageUpload = ({ isRequired, handleChange, imagePreview }) => {
   return (
     <div className="input-section">
-      <label htmlFor="imageInput">Image</label>
+      <label htmlFor="image">Image</label>
       <input
         type="file"
         required={isRequired}
         className="input"
-        name="imageInput"
+        name="image"
         onChange={handleChange}
       />
 

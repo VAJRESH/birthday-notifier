@@ -6,6 +6,7 @@ import BirthdayList from "./pages/BirthdayList";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Logout from "./pages/Logout";
+import Profile from "./pages/Profile";
 import Register from "./pages/Register";
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
       <Route path="/list/:user" exact component={BirthdayList} />
       <Route path="/user/register" component={Register} />
       <Route path="/user/login" component={Login} />
+      <Route path="/profile/:name" component={Profile} />
       <Route path="/add" component={AddNewBirthday} />
       <Route path="/user/logout" component={Logout} />
     </Router>

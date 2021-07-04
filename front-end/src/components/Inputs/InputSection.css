@@ -6,12 +6,10 @@
     margin: 20px auto;
     font-size: 1.3rem;
 }
-
 .input-section .input {
-    width: fit-content;
     outline: transparent;
     border-radius: 10px;
-    border: 2px inset black;
+    border: 2px inset skyblue;
     padding: 5px;
 }
 

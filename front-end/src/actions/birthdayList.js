@@ -1,5 +1,5 @@
 import { DEV_BACKEND_URL, ENV } from "../config";
-import { capitalize } from "../helpers/utils";
+import { capitalize, getDateMonthYearIsBirthday } from "../helpers/utils";
 
 const API = ENV === "DEVELOPMENT" ? DEV_BACKEND_URL : URL;
 
@@ -15,35 +15,6 @@ export function getListOfUser(user) {
       return res.json();
     })
     .catch((err) => console.log(err));
-}
-
-function getDateMonthYearIsBirthday(dateOfBirth) {
-  const dob = new Date(dateOfBirth);
-  const date = new Date();
-  let isBirthday = false;
-
-  const birthYear = dob.getFullYear();
-  const birthMonth = dob.getMonth();
-  const birthDate = dob.getDate();
-
-  const currentYear = date.getFullYear();
-  const currentMonth = date.getMonth();
-  const currentDate = date.getDate();
-
-  if (
-    birthYear === currentYear &&
-    birthMonth === currentMonth &&
-    birthDate === currentDate
-  ) {
-    isBirthday = true;
-  }
-
-  return {
-    date: birthDate,
-    month: birthMonth,
-    year: birthYear,
-    isBirthday,
-  };
 }
 
 export function processDataForSubmission(data) {

@@ -22,6 +22,8 @@ function useHandleInput(birthdayId, reloadList, closeModal) {
 
   function handleSubmit(e) {
     e.preventDefault();
+    setMessage("Loading...");
+
     const formData = new FormData();
     if (uploadedImage !== null) {
       formData.append("updateImage", true);
@@ -69,6 +71,7 @@ const UpdateImage = ({ birthdayId, reloadList, closeModal }) => {
 
           <div className="form-group">
             <input
+              disabled={message === "Loading..."}
               type="submit"
               value="Update Image"
               className="btn btn-primary"

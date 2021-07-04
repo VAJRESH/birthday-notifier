@@ -31,67 +31,6 @@ a {
     background-color: rgb(34, 49, 44);
 }
 
-/* hide a component when not logged in */
-#hideComponent {
-    display: none;
-}
-
-/* login and register buttons in some pages container */
-#loginContainer {
-    display: grid;
-    grid-template-columns: 4fr 1fr 1fr;
-}
-
-#loginBtn,
-#registerBtn {
-    margin: 10px;
-    min-height: 35px;
-    min-width: 100px;
-    border-radius: 10px;
-}
-
-#loginBtn {
-    background-color: rgb(95, 255, 74);
-}
-
-#registerBtn {
-    background-color: rgb(253, 42, 42)
-}
-
-/* alert box for displaying api working and status */
-.messageContainer {
-    display: block;
-}
-
-.hideMessage {
-    display: inline;
-    margin-left: 10px;
-    min-height: 25px;
-    border-radius: 10px;
-    text-align: center;
-    padding: 0px 5px;
-    border: 2px solid rgb(255, 251, 5);
-    background: rgb(252, 30, 30);
-    box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.623);
-    visibility: hidden;
-}
-
-.displayMessage {
-    width: fit-content;
-    visibility: visible;
-}
-
-.errorMessage {
-    position: absolute;
-    right: 10px;
-    top: -30px;
-    border-radius: 10px;
-    text-align: left;
-    padding: 0px 5px;
-    font-weight: bold;
-    background-color: rgb(255, 238, 0);
-    color: rgb(255, 0, 0);
-}
 
 /* white container in all pages */
 .container {
@@ -122,6 +61,10 @@ a {
     font-weight: 600;
     text-transform: none;
     margin-bottom: 1rem;
+}
+
+.fas{
+    font-size: 3rem;
 }
 
 .displayCount,
@@ -193,21 +136,21 @@ a {
 
 /* buttons for navigation in some pages */
 .addBtn,
-#backBtn {
+#btn-danger {
     color: white;
     display: block;
-    width: 100%;
+    width: 250px;
     border-color: transparent;
     background: rgb(30, 255, 0);
     margin: 1rem auto;
     text-transform: capitalize;
     font-size: 1.2rem;
-    padding: 0.5rem 0;
+    padding: 10px 20px;
     border-radius: 10px;
     cursor: pointer;
 }
 
-#backBtn {
+#btn-danger {
     margin-bottom: 1em;
     background: rgb(252, 30, 30);
 }
@@ -238,14 +181,20 @@ a {
     grid-column: 1/4;
     color: white;
     display: block;
-    width: 100%;
+    width: 250px;
     border-color: transparent;
     background: rgb(30, 255, 0);
     text-transform: capitalize;
     font-size: 1.2rem;
-    padding: 0.5rem 0;
+    margin: auto;
+    padding: 10px 20px;
     border-radius: 10px;
     cursor: pointer;
+}
+
+input:disabled {
+    background: rgb(122, 122, 122) !important;
+    cursor: not-allowed !important;
 }
 
 /* Hover Style */
@@ -354,10 +303,13 @@ button:hover {
     margin: 10px auto;
 }
 
-.redirect-link {
+.message-info, .message-danger {
     font-style: italic;
     font-weight: 600;
-    margin: 10px auto;
+    margin: 20px auto;
+}
+.message-danger{
+    color: red;
 }
 
 
@@ -418,7 +370,10 @@ button:hover {
     font-weight: 500;
     font-size: 1.3rem;
 }
+.cta:hover{
+    background-color: #00a1ff;
 
+}
 .cta a {
     color: inherit;
 }
@@ -436,9 +391,32 @@ button:hover {
     margin: 20px auto;
 }
 
-.form-section:nth-child(3) {
+.form-section:nth-child(3),
+.form-section:nth-child(4),
+.form-section:nth-child(5) {
     grid-column: 1/3;
     margin-bottom: 10px;
+}
+
+.form-section:nth-child(4) {
+    margin: 0 auto;
+    min-height: 20px;
+}
+
+.submit-button {
+    background-color: #fff;
+    border: 2px solid;
+    color: #000;
+    padding: 5px 10px;
+    font-size: 1.2rem;
+    width: fit-content;
+}
+
+.submit-button:hover {
+    border-color: transparent;
+    outline-color: transparent;
+    background-color: rgb(27, 27, 27);
+    color: #fff;
 }
 
 .form-section>label {
@@ -453,7 +431,7 @@ button:hover {
     border: transparent;
     outline: transparent;
     border-bottom: 2px solid;
-    padding: 0 5px;
+    padding: 0px 5px 2px;
     margin: auto 1vw;
 }
 
@@ -469,10 +447,21 @@ textarea {
     width: 50vw;
 }
 
-.portfolio-link a{
+.portfolio-link a {
     color: white;
 }
 
-.portfolio-link a:hover{
+.portfolio-link a:hover {
     color: #00a1ff;
+}
+
+.btn-danger{
+    grid-column: 1/3;
+    border: transparent;
+    outline: transparent;
+    padding: 10px;
+    margin: auto;
+    color: white;
+    font-size: 1.2rem;
+    font-weight: 500;
 }

@@ -48,16 +48,17 @@ function useHandleInputs(history) {
         ...message,
         success: response ? response.error || "Login Success" : "No response",
       });
-      if (response.error) return;
+      if (response && response.error) return;
 
       if (response) {
         setCookies("token", response.token);
         localStorage.setItem("userId", response.user._id);
         localStorage.setItem("name", response.user.name);
         localStorage.setItem("email", response.user.email);
+
         // redirect user to home page after successful login
         setTimeout(() => {
-          history.push("/");
+          history.push(`/list/${response.user.name}`);
         }, 2000);
       }
     });
@@ -99,6 +100,17 @@ const Login = ({ history }) => {
 
         <div className="form-group">
           <input type="submit" value="Login" />
+        </div>
+        <div className="message-info">
+          <p>Try logging in with the Demo account</p>
+          <p>
+            If you liked it then register with your email to receive email
+            reminders
+          </p>
+          <section>
+            <p>Email: demo@birthday.notifier.app</p>
+            <p>Password: Demo@isSecured</p>
+          </section>
         </div>
       </form>
     </div>

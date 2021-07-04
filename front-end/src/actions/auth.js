@@ -32,6 +32,21 @@ export function login(user) {
     .catch((err) => console.log(err));
 }
 
+export function update(user, token) {
+  return fetch(`${API}/auth/update`, {
+    method: "PUT",
+    headers: {
+      Accept: "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: user,
+  })
+    .then((res) => {
+      return res.json();
+    })
+    .catch((err) => console.log(err));
+}
+
 export function isValidName(name) {
   return name.length < 3 ? "Name should be of at least 3 characters." : null;
 }
@@ -83,9 +98,28 @@ export function logout() {
   deleteCookie("token");
   localStorage.clear();
 
-  return fetch(`${API}/user/logout`, { method: "GET" })
+  return fetch(`${API}/auth/logout`, { method: "GET" })
     .then(() => {
       return "Logout Success";
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+}
+
+export function deleteUser(token) {
+  deleteCookie("token");
+  localStorage.clear();
+
+  return fetch(`${API}/auth/delete`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  })
+    .then((res) => {
+      return res.json();
     })
     .catch((err) => {
       console.log(err);

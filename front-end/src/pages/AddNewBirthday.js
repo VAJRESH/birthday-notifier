@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { getCookie } from "../actions/auth";
 import {
   addNewBirthday,
-  processDataForSubmission
+  processDataForSubmission,
 } from "../actions/birthdayList";
 import ImageUpload from "../components/Inputs/ImageUpload/ImageUpload";
 import InputSection from "../components/Inputs/InputSection";
@@ -18,9 +18,9 @@ function useHandleInput() {
   });
 
   function handleInput(e) {
-    console.log(e.target);
     const data = birthdayData.data;
     const name = e.target.name.toLowerCase();
+
     data[name] = name === "image" ? e.target.files[0] : e.target.value;
 
     if (name === "image" && e.target.files[0]) {
@@ -34,16 +34,18 @@ function useHandleInput() {
 
   function handleSubmit(e) {
     e.preventDefault();
-    console.log(e.target);
-    console.log(birthdayData);
+    setMessage("Loading...");
+    const token = getCookie("token");
+
+    if (!token.trim()) return setMessage("Please Login to add Birthdays");
+
     const data = processDataForSubmission(birthdayData.data);
-    addNewBirthday(data, getCookie("token"))
+    addNewBirthday(data, token)
       .then((res) => {
-        console.log(res);
         setMessage(res ? res.error || res.message : "No response");
         setBirthdayData({ data: { name: "", date: "", image: "" } });
       })
-      .catch((err) => console.log(err));
+      .catch((err) => setMessage(err));
   }
 
   return {
@@ -64,7 +66,7 @@ const AddNewBirthday = () => {
 
       <div className="container">
         <h3>Enter Details</h3>
-        <Link to={`/list/${localStorage.getItem("name")}`} id="backBtn">
+        <Link to={`/list/${localStorage.getItem("name")}`} id="btn-danger">
           Back
         </Link>
         <form onSubmit={handleSubmit}>
@@ -102,6 +104,7 @@ const AddNewBirthday = () => {
 
           <div className="form-group">
             <input
+              disabled={message === "Loading..."}
               type="submit"
               value="Add Birthday"
               className="btn btn-primary"

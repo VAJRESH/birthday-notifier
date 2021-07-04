@@ -5,7 +5,7 @@ const cloudinary = require('cloudinary');
 const fs = require('fs');
 const path = require('path');
 
-let Birthday = require('../models/birthday.models');
+let Birthday = require('./birthday.models');
 let router = express.Router();
 
 require('dotenv').config({path: path.join(__dirname, '..', '.env')});

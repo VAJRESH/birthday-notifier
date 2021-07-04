@@ -18,21 +18,30 @@ const Navbar = (router) => {
   return (
     <nav className="nav-container">
       <Link to="/" className="nav-items">
-        {APP_NAME}
+        {window.innerWidth >= 400 ? APP_NAME : "BN"}
       </Link>
       <div className="nav-items">
         {isLoggedIn() ? (
-          <>
-            <Link className="nav-link" to="/user/logout">
-              Logout
-            </Link>
-            <Link
-              className="nav-link"
-              to={`/list/${localStorage.getItem("name")}`}
-            >
-              Birthday List
-            </Link>
-          </>
+          <div>
+            <div className="menu-icon"></div>
+            <section className="menu-links">
+              <Link
+                className="nav-link"
+                to={`/list/${localStorage.getItem("name")}`}
+              >
+                Birthday List
+              </Link>
+              <Link
+                className="nav-link"
+                to={`/profile/${localStorage.getItem("name")}`}
+              >
+                Profile
+              </Link>
+              <Link className="nav-link" to="/user/logout">
+                Logout
+              </Link>
+            </section>
+          </div>
         ) : (
           <>
             <Link className="nav-link" to="/user/login">

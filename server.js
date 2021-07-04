@@ -28,9 +28,9 @@ connection.once("open", () => {
   console.log("Mongodb connection successful");
 });
 
-// register and login and logout system
-const user = require("./routes/user");
-app.use("/user", user);
+// user details routes
+const userRoutes = require("./routes/user.routes");
+app.use("/user", userRoutes);
 
 // auth routes
 const authRoutes = require("./routes/auth.routes");
@@ -40,7 +40,7 @@ app.use("/auth", authRoutes);
 const addBirthdays = require("./routes/birthday.routes");
 app.use("/birthday", addBirthdays);
 
-// images folder for saving uploaded avatar
+// serving default image
 app.use("/images", express.static(path.join(__dirname, "images")));
 
 const publicPath = path.join(__dirname, "front-end", "build");

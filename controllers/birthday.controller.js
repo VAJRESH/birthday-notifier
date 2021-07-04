@@ -1,7 +1,8 @@
 const path = require("path");
+const fs = require("fs");
 const cloudinary = require("cloudinary");
-const User = require("../models/user.model");
 const { Birthday, BirthdayList } = require("../models/birthday.model");
+const { getFormattedDate, isBirthdayToday } = require("../helper/controllers");
 
 require("dotenv").config({ path: path.join(__dirname, "..", ".env") });
 
@@ -21,10 +22,36 @@ exports.getUserBirthdayList = (req, res) => {
   });
 };
 
+// loops through each list and updates isBirthday to true or false
+exports.updateList = (req, res) => {
+  BirthdayList.find({}).exec((err, list) => {
+    if (err) return res.status(400).json({ error: err });
+    const userIdAndBirthdays = {};
+    list.forEach((object) => {
+      object.birthdays.forEach((birthday) => {
+        const { date, month, year } = birthday;
+        birthday.isBirthday = isBirthdayToday(
+          getFormattedDate(date, month, year)
+        );
+
+        if (birthday.isBirthday) {
+          if (!userIdAndBirthdays[object.userId])
+            userIdAndBirthdays[object.userId] = [];
+          userIdAndBirthdays[object.userId].push(birthday);
+        }
+      });
+      object.save();
+    });
+
+    return res.json(userIdAndBirthdays);
+  });
+};
+
 exports.addNewBirthday = (req, res) => {
   const userId = req.user._id;
   const { name, gender, date, month, year, isBirthday } = req.body;
   let image, cloudinary_id;
+  console.log(req.file);
 
   BirthdayList.findOne({ userId }).exec(async (err, list) => {
     if (err) return res.status(400).json({ error: err });
@@ -37,6 +64,10 @@ exports.addNewBirthday = (req, res) => {
       const results = await cloudinary.uploader
         .upload(req.file.path)
         .catch((err) => console.log(error, err));
+
+      await fs.unlink(req.file.path, (err) => {
+        if (err) return console.error(err);
+      });
 
       image = results.secure_url;
       cloudinary_id = results.public_id;
@@ -99,10 +130,14 @@ exports.updateImage = (req, res) => {
 
     if (updateImage) {
       if (!req.file) return res.status(400).json({ error: "No file uploaded" });
-      
+
       const results = await cloudinary.uploader
         .upload(req.file.path)
-        .catch((err) => console.log(error, err));
+        .catch((err) => console.log("error", err));
+
+      await fs.unlink(req.file.path, (err) => {
+        if (err) return console.error(err);
+      });
 
       birthdayItem.image = results.secure_url;
       birthdayItem.cloudinary_id = results.public_id;
@@ -133,9 +168,7 @@ exports.deleteBirthday = (req, res) => {
 
     list
       .save()
-      .then(() =>
-        res.json({ message: `${birthday.name}'s Birthday Deleted` })
-      )
+      .then(() => res.json({ message: `${birthday.name}'s Birthday Deleted` }))
       .catch((err) => res.status(400).json(`Error: ${err}`));
   });
 };

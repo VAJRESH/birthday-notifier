@@ -1,9 +1,12 @@
-const { isEmpty, isValidEmail, isPasswordLong } = require('../helper/validations');
+const {
+  isEmpty,
+  isValidEmail,
+  isPasswordLong,
+} = require("../helper/validations");
 
 exports.validateRegisterDetails = (req, res, next) => {
   const { name, email, password } = req.body;
-  if (isEmpty(name))
-    return res.status(422).json({ error: "Name is required" });
+  if (isEmpty(name)) return res.status(422).json({ error: "Name is required" });
 
   if (!isValidEmail(email))
     return res.status(422).json({ error: "Must be a valid email address" });
@@ -12,7 +15,7 @@ exports.validateRegisterDetails = (req, res, next) => {
     return res
       .status(422)
       .json({ error: "Password must be at least 6 characters long" });
- 
+
   next();
 };
 
