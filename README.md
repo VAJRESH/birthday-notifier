@@ -15,6 +15,13 @@
   - Email: demo@birthday.notifier.app
   - Password: Demo@isSecured
 
+## Versions and Release Dates
+[Birthday Notifier](http://birthday-notifier00.herokuapp.com/)
+| Version   | Release Date  |
+| :----:    | :---------:   |
+| v1.0.0    | 15 Feb 2021   |
+| v2.0.0    | 07 Jul 2021   |
+
 
 ## Task and Progress
 - Deploy it and set the scheduler.
