@@ -8,30 +8,49 @@ const {
   isPasswordLong,
 } = require("../helper/validations");
 
+exports.isNameTaken = (req, res) => {
+  const name = req.params.name.toLowerCase();
+
+  User.find({ name }).exec((findError, user) => {
+    if (findError) return res.status(400).json({ error: findError });
+    if (user.length !== 0) return res.status(400).send(true);
+
+    res.send(false);
+  });
+};
+
 exports.register = (req, res) => {
   const { name, email, password } = req.body;
 
-  User.findOne({ email }).exec((findError, user) => {
-    if (findError) return res.status(400).json({ error: findError });
-    if (user) return res.status(400).json({ error: "Email is taken" });
+  User.find({ $or: [{ name: name }, { email: email }] }).exec(
+    (findError, user) => {
+      if (findError) return res.status(400).json({ error: findError });
 
-    const newUser = new User({ name, email, password });
-    newUser.save((saveError, user) => {
-      if (saveError) return res.status(400).json({ error: saveError });
+      if (user.length !== 0) {
+        if (user[0].name === name)
+          return res.status(400).json({ error: "Name is taken" });
+        if (user[0].email === email)
+          return res.status(400).json({ error: "Email is taken" });
+      }
 
-      const birthdayList = new BirthdayList({
-        userId: user._id,
-        belongsTo: user.name,
-      });
-      birthdayList.save((err, data) => {
-        if (err) return res.status(400).json({ error: err });
+      const newUser = new User({ name: name.toLowerCase(), email, password });
+      newUser.save((saveError, user) => {
+        if (saveError) return res.status(400).json({ error: saveError });
 
-        return res.json({
-          message: `New User, ${name} is registered. Please login.`,
+        const birthdayList = new BirthdayList({
+          userId: user._id,
+          belongsTo: user.name,
+        });
+        birthdayList.save((err, data) => {
+          if (err) return res.status(400).json({ error: err });
+
+          return res.json({
+            message: `New User, ${name} is registered. Please login.`,
+          });
         });
       });
-    });
-  });
+    }
+  );
 };
 
 exports.login = (req, res) => {

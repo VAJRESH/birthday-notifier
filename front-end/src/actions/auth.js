@@ -2,6 +2,20 @@ import { DEV_BACKEND_URL, ENV } from "../config";
 
 const API = ENV === "DEVELOPMENT" ? DEV_BACKEND_URL : URL;
 
+export function isNameAvailable(name) {
+  return fetch(`${API}/auth/${name}`, {
+    method: "GET",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+  })
+    .then((res) => {
+      return res.json();
+    })
+    .catch((err) => console.log(err));
+}
+
 export function register(user) {
   return fetch(`${API}/auth/register`, {
     method: "POST",

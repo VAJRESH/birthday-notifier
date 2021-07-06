@@ -43,7 +43,7 @@ function useHandleInput() {
     addNewBirthday(data, token)
       .then((res) => {
         setMessage(res ? res.error || res.message : "No response");
-        setBirthdayData({ data: { name: "", date: "", image: "" } });
+        setBirthdayData({ data: { name: "", date: "", image: "", gender: 'Male' } });
       })
       .catch((err) => setMessage(err));
   }
@@ -81,7 +81,7 @@ const AddNewBirthday = () => {
 
           <div className="input-section">
             <label>Gender: </label>
-            <select className="input" onChange={handleInput} name="Gender">
+            <select className="input" onChange={handleInput} value={data.gender} name="Gender">
               <option value="Male">Male</option>
               <option value="Female">Female</option>
             </select>

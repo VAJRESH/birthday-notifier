@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, withRouter } from "react-router-dom";
 import {
   isLoggedIn,
+  isNameAvailable,
   isPasswordStrong,
   isValidEmail,
   isValidName,
@@ -23,6 +24,23 @@ function useHandleInputs(history) {
     if (isLoggedIn()) return history.push("/user/logout");
     // eslint-disable-next-line
   }, []);
+
+  useEffect(() => {
+    if (!data.name) return;
+    
+    const reqApi = setTimeout(() => {
+      isNameAvailable(data.name).then((res) => {
+        if (res) {
+          setMessage({ ...message, name: "Name is taken" });
+        } else {
+          setMessage({ ...message, name: "Name is available" });
+        }
+      });
+    }, 1000);
+    
+    return () => clearTimeout(reqApi);
+    // eslint-disable-next-line
+  }, [data.name]);
 
   function handleName(e) {
     setMessage({

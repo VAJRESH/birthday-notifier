@@ -9,6 +9,7 @@ const {
   logout,
   update,
   deleteUser,
+  isNameTaken,
   requireLogin
 } = require("../controllers/auth.controller.js");
 
@@ -19,6 +20,7 @@ const {
 } = require("../validators/auth.validator");
 
 // routes
+router.get("/:name", isNameTaken);
 router.post("/register", validateRegisterDetails, register);
 router.post("/login", validateLoginDetails, login);
 router.put("/update", multer().none(), requireLogin, update);
