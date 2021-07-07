@@ -1,20 +1,25 @@
-import React from 'react';
-import { BrowserRouter as Router, Route} from "react-router-dom";
-
-import DisplayList from './components/show-birthday-list.component';
-import AddBirthday from './components/add-birthday.component';
-import EditBirthday from './components/edit-birthday.component';
-import Register from './components/register.component';
-import Login from './components/login.component';
+import React from "react";
+import { BrowserRouter as Router, Route } from "react-router-dom";
+import Navbar from "./components/navbar/Navbar.component";
+import AddNewBirthday from "./pages/AddNewBirthday";
+import BirthdayList from "./pages/BirthdayList";
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+import Logout from "./pages/Logout";
+import Profile from "./pages/Profile";
+import Register from "./pages/Register";
 
 function App() {
   return (
     <Router>
-      <Route path="/" exact component={DisplayList} />
-      <Route path="/add" component={AddBirthday} />
-      <Route path="/edit/:id" component={EditBirthday} />
+      <Navbar />
+      <Route path="/" exact component={Home} />
+      <Route path="/list/:user" exact component={BirthdayList} />
       <Route path="/user/register" component={Register} />
       <Route path="/user/login" component={Login} />
+      <Route path="/profile/:name" component={Profile} />
+      <Route path="/add" component={AddNewBirthday} />
+      <Route path="/user/logout" component={Logout} />
     </Router>
   );
 }
