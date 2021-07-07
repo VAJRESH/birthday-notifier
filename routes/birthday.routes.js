@@ -34,6 +34,7 @@ const {
   editBirthday,
   updateImage,
   deleteBirthday,
+  checkForBirthdays
 } = require("../controllers/birthday.controller");
 const { requireLogin } = require("../controllers/auth.controller.js");
 
@@ -58,6 +59,6 @@ router.put(
   requireLogin,
   updateImage
 );
-
+router.get("/updateList", checkForBirthdays);
 
 module.exports = router;

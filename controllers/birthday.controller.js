@@ -3,6 +3,7 @@ const fs = require("fs");
 const cloudinary = require("cloudinary");
 const { Birthday, BirthdayList } = require("../models/birthday.model");
 const { getFormattedDate, isBirthdayToday } = require("../helper/controllers");
+const { updateListAndEmailToUsers } = require("../helper/updateListAndNotify");
 
 require("dotenv").config({ path: path.join(__dirname, "..", ".env") });
 
@@ -27,6 +28,7 @@ exports.updateList = (req, res) => {
   BirthdayList.find({}).exec((err, list) => {
     if (err) return res.status(400).json({ error: err });
     const userIdAndBirthdays = {};
+
     list.forEach((object) => {
       object.birthdays.forEach((birthday) => {
         const { date, month, year } = birthday;
@@ -171,4 +173,12 @@ exports.deleteBirthday = (req, res) => {
       .then(() => res.json({ message: `${birthday.name}'s Birthday Deleted` }))
       .catch((err) => res.status(400).json(`Error: ${err}`));
   });
+};
+
+exports.checkForBirthdays = (req, res) => {
+  updateListAndEmailToUsers()
+    .then((msg) => {
+      return res.json({message: msg});
+    })
+    .catch((err) => res.json({ error: err }));
 };
