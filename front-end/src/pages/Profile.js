@@ -18,7 +18,7 @@ function useManageUserDetails() {
     const name = getLastNameFromUrl();
 
     // demo account
-    if (name === "Demo")
+    if (name === "demo")
       return setMessage("Cannot view or edit demo account!!");
 
     if (name === localStorage.getItem("name")) {
