@@ -1,4 +1,4 @@
-import { DEV_BACKEND_URL, ENV } from "../config";
+import { DEV_BACKEND_URL, URL, ENV } from "../config";
 import { capitalize, getDateMonthYearIsBirthday } from "../helpers/utils";
 
 const API = ENV === "DEVELOPMENT" ? DEV_BACKEND_URL : URL;

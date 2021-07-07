@@ -1,4 +1,4 @@
-const API = "http://birthday-notifier00.herokuapp.com/";
+const API = "http://birthday-notifier00.herokuapp.com";
 const axios = require("axios");
 
 function generateMessage(data) {
