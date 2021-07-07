@@ -74,7 +74,6 @@ export function getDateMonthYearIsBirthday(dateOfBirth) {
   const birthMonth = dob.getMonth();
   const birthDate = dob.getDate();
 
-  const currentYear = date.getFullYear();
   const currentMonth = date.getMonth();
   const currentDate = date.getDate();
 
