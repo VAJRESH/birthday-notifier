@@ -17,6 +17,8 @@ exports.isBirthdayToday = (dateArray) => {
   const currentMonth = todayDate.getMonth();
   const currentDate = todayDate.getDate();
 
+  console.log(currentMonth,birthMonth,currentDate,birthDate);
+  console.log(currentMonth === birthMonth,currentDate === birthDate);
   if (currentMonth === birthMonth && currentDate === birthDate) {
     return true;
   }
