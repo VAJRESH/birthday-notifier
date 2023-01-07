@@ -9,7 +9,7 @@
 - User can then manage their list of birthdays.
 - Once logged in, perform basic [CRUD actions](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete) like adding, deleting, editing entries.
 - The entries get sorted according to the latest upcoming birthdays.
-- A 'Happy Birthday!!' message is displayed if someones birthday is on that day.
+- A 'Happy Birthday!' message is displayed if someones birthday is on that day.
 - Email message will be send to the registered email at 00:00 on the day of birthday from anyone in the list.  
 - If you dont want to register but have experience of the website you can use the demo account.
   - Email: demo@birthday.notifier.app
