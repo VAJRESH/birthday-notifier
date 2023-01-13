@@ -465,3 +465,18 @@ textarea {
     font-size: 1.2rem;
     font-weight: 500;
 }
+
+
+.date-dropdown{
+    display: flex;
+    justify-content: space-evenly;
+    gap: 20px;
+}
+
+.date-dropdown select{
+    flex: 1;
+}
+.mute{
+    color: rgb(106, 106, 106);
+    font-size: 14px;
+}

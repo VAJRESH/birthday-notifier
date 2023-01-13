@@ -33,7 +33,7 @@ exports.updateList = (req, res) => {
       object.birthdays.forEach((birthday) => {
         const { date, month, year } = birthday;
         birthday.isBirthday = isBirthdayToday(
-          getFormattedDate(date, month, year)
+          getFormattedDate(date, month, year),
         );
 
         if (birthday.isBirthday) {
@@ -114,10 +114,14 @@ exports.editBirthday = (req, res) => {
 
     list
       .save()
-      .then(() =>
-        res.json({ message: `${birthdayItem.name}'s birthday updated` })
-      )
-      .catch((err) => res.status(400).json(`Error: ${err}`));
+      .then((data) => {
+        console.log(data);
+        res.json({ message: `${birthdayItem.name}'s birthday updated` });
+      })
+      .catch((err) => {
+        console.log(err);
+        res.status(400).json(`Error: ${err}`);
+      });
   });
 };
 
@@ -151,7 +155,7 @@ exports.updateImage = (req, res) => {
     list
       .save()
       .then(() =>
-        res.json({ message: `Image ${updateImage ? "updated" : "removed"}` })
+        res.json({ message: `Image ${updateImage ? "updated" : "removed"}` }),
       )
       .catch((err) => res.status(400).json(`Error: ${err}`));
   });
@@ -178,7 +182,7 @@ exports.deleteBirthday = (req, res) => {
 exports.checkForBirthdays = (req, res) => {
   updateListAndEmailToUsers()
     .then((msg) => {
-      return res.json({message: msg});
+      return res.json({ message: msg });
     })
     .catch((err) => res.json({ error: err }));
 };

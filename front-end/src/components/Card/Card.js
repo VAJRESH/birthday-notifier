@@ -4,6 +4,9 @@ import "./Card.css";
 import CardActions from "./CardActions";
 
 const Card = ({ item, isAuth, handleEvents }) => {
+  const age = getAgeFromBirthday(item.date, item.month, item.year);
+  const displayAge = age ? `${age} years` : "";
+
   return (
     <div className={`person ${item.isBirthday}`} key={item._id}>
       <div id={item.isBirthday.toString()}>Happy Birthday!!</div>
@@ -21,12 +24,10 @@ const Card = ({ item, isAuth, handleEvents }) => {
             {window.innerWidth < 500
               ? month[item.month].slice(0, 3)
               : month[item.month]}{" "}
-            {item.year}
+            {+item.year ? item.year : ""}
           </p>
           <br />
-          <p className="displayAge">
-            {getAgeFromBirthday(item.date, item.month, item.year)} years
-          </p>
+          <p className="displayAge">{displayAge}</p>
           <br />
         </section>
       </section>

@@ -6,14 +6,14 @@ const birthdaySchema = new mongoose.Schema(
     gender: { type: String, required: true },
     date: { type: Number, required: true },
     month: { type: Number, required: true },
-    year: { type: Number, required: true },
+    year: { type: String, default: null },
     isBirthday: { type: Boolean, required: true },
     image: { type: String, required: true },
     cloudinary_id: { type: String },
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 const birthdayListSchema = new mongoose.Schema({

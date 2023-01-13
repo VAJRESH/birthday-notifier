@@ -20,8 +20,11 @@ export function getListOfUser(user) {
 export function processDataForSubmission(data) {
   const formData = new FormData();
   const { date, month, year, isBirthday } = getDateMonthYearIsBirthday(
-    data.date
+    +data?.date,
+    +data?.month,
+    +data?.year,
   );
+
   formData.append("name", capitalize(data.name));
   formData.append("gender", data.gender);
   formData.append("date", date);

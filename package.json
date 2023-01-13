@@ -39,5 +39,8 @@
   "bugs": {
     "url": "https://github.com/VAJRESH/birthday-notifier/issues"
   },
-  "homepage": "https://github.com/VAJRESH/birthday-notifier#readme"
+  "homepage": "https://github.com/VAJRESH/birthday-notifier#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  }
 }

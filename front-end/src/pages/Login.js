@@ -46,7 +46,7 @@ function useHandleInputs(history) {
     login(data).then((response) => {
       setMessage({
         ...message,
-        success: response ? response.error || "Login Success" : "No response",
+        success: response ? response.error || "Login Success" : "Login Error",
       });
       if (response && response.error) return;
 

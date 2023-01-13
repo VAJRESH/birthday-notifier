@@ -1,4 +1,6 @@
 export function getAgeFromBirthday(date, month, year) {
+  if (!+year) return null;
+
   const dob = new Date(year, month, date);
   const todayDate = new Date();
 
@@ -65,14 +67,13 @@ export function getLastNameFromUrl() {
   return user;
 }
 
-export function getDateMonthYearIsBirthday(dateOfBirth) {
-  const dob = new Date(dateOfBirth);
+export function getDateMonthYearIsBirthday(
+  birthDate,
+  birthMonth,
+  birthYear = null,
+) {
   const date = new Date();
   let isBirthday = false;
-
-  const birthYear = dob.getFullYear();
-  const birthMonth = dob.getMonth();
-  const birthDate = dob.getDate();
 
   const currentMonth = date.getMonth();
   const currentDate = date.getDate();
@@ -84,7 +85,31 @@ export function getDateMonthYearIsBirthday(dateOfBirth) {
   return {
     date: birthDate,
     month: birthMonth,
-    year: birthYear,
+    year: +birthYear || null,
     isBirthday,
   };
+}
+
+export function getDateOptions(selectedMonthInt) {
+  let noOfDays = 30;
+
+  if (selectedMonthInt % 2 === 0) noOfDays = 31;
+  if (selectedMonthInt === 1) noOfDays = 28;
+  if (selectedMonthInt === 1 && selectedMonthInt?.year % 4 === 0) noOfDays = 29;
+  if (selectedMonthInt === 7) noOfDays = 31;
+
+  return [...Array(noOfDays)];
+}
+
+export function getYearOptions() {
+  const years = [];
+  const date = new Date();
+  const currentYear = date.getFullYear();
+
+  for (let i = 70; i >= 0; --i) {
+    years.unshift(currentYear - i);
+  }
+
+  years.unshift("--Not Specified--");
+  return years;
 }
