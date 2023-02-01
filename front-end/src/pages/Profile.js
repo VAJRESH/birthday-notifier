@@ -6,13 +6,18 @@ import InputSection from "../components/Inputs/InputSection";
 import ToastMessage from "../components/ToastMessage/ToastMessage.component";
 import { getLastNameFromUrl } from "../helpers/utils";
 
-function useManageUserDetails() {
+function useManageUserDetails(allEmailLists, setEmails) {
   const [profileDetails, setProfileDetails] = useState({});
   const [updatedData, setUpdatedData] = useState({
     name: "",
     email: "",
+    emailList: [],
   });
   const [message, setMessage] = useState();
+
+  useEffect(() => {
+    setUpdatedData({ ...updatedData, emailList: allEmailLists });
+  }, [allEmailLists]);
 
   useEffect(() => {
     const name = getLastNameFromUrl();
@@ -25,9 +30,10 @@ function useManageUserDetails() {
       getUserDetails(name).then((res) => {
         setProfileDetails(res || {});
         setUpdatedData(res || {});
+        setEmails((prev) => ({ ...prev, items: res?.emailList }));
       });
     } else {
-      setMessage('You can only see your profile. Please login')
+      setMessage("You can only see your profile. Please login");
     }
   }, []);
 
@@ -41,12 +47,13 @@ function useManageUserDetails() {
 
   function handleSubmit(e) {
     e.preventDefault();
-    const { name, email, password } = updatedData;
+    const { name, email, password, emailList } = updatedData;
 
     const formData = new FormData();
     name && formData.append("name", name);
     email && formData.append("email", email);
     password && formData.append("password", password);
+    formData.append("emailList", emailList);
 
     update(formData, getCookie("token")).then((res) => {
       console.log(res);
@@ -56,17 +63,33 @@ function useManageUserDetails() {
         localStorage.setItem("name", updatedData.name);
         localStorage.setItem("email", updatedData.email);
 
-        window.location.replace(`/profile/${updatedData.name}`);
+        // window.location.replace(`/profile/${updatedData.name}`);
       }
     });
   }
 
-  return { profileDetails, updatedData, handleInput, handleSubmit, message };
+  return {
+    profileDetails,
+    updatedData,
+    handleInput,
+    handleSubmit,
+    message,
+    setUpdatedData,
+  };
 }
 
-const Profile = () => {
+export default function Profile() {
+  const {
+    emails,
+    setEmails,
+    handleChange,
+    handleDelete,
+    handleKeyDown,
+    handlePaste,
+  } = useHandleMultiEmail();
+
   const { profileDetails, updatedData, handleInput, handleSubmit, message } =
-    useManageUserDetails();
+    useManageUserDetails(emails?.items, setEmails);
 
   return (
     <div className="main-container">
@@ -99,6 +122,34 @@ const Profile = () => {
               handleChange={handleInput}
             />
 
+            <div className="email-container">
+              <span className="tag-item">{updatedData?.email}</span>
+
+              {emails?.items?.map((item) => (
+                <div className="tag-item" key={item}>
+                  {item}
+                  <span className="button" onClick={() => handleDelete(item)}>
+                    &times;
+                  </span>
+                </div>
+              ))}
+            </div>
+
+            <InputSection
+              label={"Emails to Notify"}
+              value={emails?.value}
+              example="Type or paste email addresses and press `Enter`..."
+              handleChange={handleChange}
+              isNotRequired={true}
+              inputProps={{
+                className: "input " + (emails?.error && " has-error"),
+                onKeyDown: handleKeyDown,
+                onPaste: handlePaste,
+              }}
+            />
+
+            {emails?.error && <p className="error">{emails?.error}</p>}
+
             <div className="form-group">
               <input
                 type="submit"
@@ -120,6 +171,86 @@ const Profile = () => {
       </section>
     </div>
   );
-};
+}
 
-export default Profile;
+function useHandleMultiEmail() {
+  const [emails, setEmails] = React.useState({
+    items: [],
+    value: "",
+    error: null,
+  });
+
+  function handleKeyDown(evt) {
+    if (["Enter", "Tab", ","].includes(evt.key)) {
+      evt.preventDefault();
+
+      var value = emails.value.trim();
+
+      if (value && isValid(value)) {
+        setEmails({
+          ...emails,
+          items: [...emails?.items, emails?.value],
+          value: "",
+        });
+      }
+    }
+  }
+
+  function handleChange(evt) {
+    setEmails({ ...emails, value: evt.target.value, error: null });
+  }
+
+  function handleDelete(item) {
+    setEmails({ ...emails, items: emails?.items.filter((i) => i !== item) });
+  }
+
+  function handlePaste(evt) {
+    evt.preventDefault();
+
+    var paste = evt.clipboardData.getData("text");
+    var emails = paste.match(/[\w\d\.-]+@[\w\d\.-]+\.[\w\d\.-]+/g);
+
+    if (emails) {
+      var toBeAdded = emails.filter((email) => !isInList(email));
+
+      setEmails({ ...emails, items: [...emails?.items, ...toBeAdded] });
+    }
+  }
+
+  function isValid(email) {
+    let error = null;
+
+    if (isInList(email)) {
+      error = `${email} has already been added.`;
+    }
+
+    if (!isEmail(email)) {
+      error = `${email} is not a valid email address.`;
+    }
+
+    if (error) {
+      setEmails({ ...emails, error });
+
+      return false;
+    }
+
+    return true;
+  }
+
+  function isInList(email) {
+    return emails?.items.includes(email);
+  }
+
+  function isEmail(email) {
+    return /[\w\d\.-]+@[\w\d\.-]+\.[\w\d\.-]+/.test(email);
+  }
+
+  return {
+    emails,
+    setEmails,
+    handleChange,
+    handleDelete,
+    handleKeyDown,
+    handlePaste,
+  };
+}

@@ -6,7 +6,8 @@ exports.getFormattedDate = (date, month, year) => {
 
 exports.isBirthdayToday = (dateArray) => {
   const [date, month, year] = dateArray;
-  const dob = new Date(year, month, date);
+  let _year = year !== "null" ? year : new Date().getFullYear();
+  const dob = new Date(_year, month, date);
   const todayDate = new Date();
 
   //const birthYear = dob.getFullYear();

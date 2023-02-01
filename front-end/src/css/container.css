@@ -480,3 +480,28 @@ textarea {
     color: rgb(106, 106, 106);
     font-size: 14px;
 }
+
+.email-container{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-left: 50%;
+}
+
+.tag-item{
+    background-color: skyblue;
+    margin: 0px 10px;
+    border-radius: 10px;
+    padding: 3px 10px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.tag-item .button{
+    background-color: transparent;
+    border: 0px;
+    margin-left: 5px;
+    cursor: pointer;
+}

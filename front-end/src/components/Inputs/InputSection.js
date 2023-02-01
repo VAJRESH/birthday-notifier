@@ -9,19 +9,20 @@ const InputSection = ({
   isNotRequired,
   handleChange,
   errorMessage,
+  inputProps = {},
 }) => {
-  
   return (
     <div className="input-section">
       <label htmlFor={label}>{label}</label>
       <input
+        {...inputProps}
         type={inputType}
-        required={isNotRequired ? false : true}
         placeholder={example}
         className="input"
         name={label}
         value={value}
         onChange={handleChange}
+        required={!isNotRequired}
       />
       <small>{errorMessage}</small>
     </div>

@@ -49,7 +49,7 @@ exports.register = (req, res) => {
           });
         });
       });
-    }
+    },
   );
 };
 
@@ -78,9 +78,9 @@ exports.login = (req, res) => {
 };
 
 exports.update = (req, res) => {
-  const { name, email, password } = req.body;
+  const { name, email, password, emailList } = req.body;
   const userId = req.user._id;
-  let updatedFields = [];
+  // let updatedFields = [];
 
   User.findById(userId).exec((findError, user) => {
     if (findError) return res.status(400).json({ error: findError });
@@ -90,32 +90,32 @@ exports.update = (req, res) => {
     console.log(name, email, password);
     if (name && !isEmpty(name) && name !== user.name) {
       user.name = name;
-      updatedFields.push("name");
+      // updatedFields.push("name");
     }
     if (email && isValidEmail(email) && email !== user.email) {
       user.email = email;
-      updatedFields.push("email");
+      // updatedFields.push("email");
     }
 
     if (password && isPasswordLong(password, 6)) {
       user.password = password;
-      updatedFields.push("password");
+      // updatedFields.push("password");
     }
 
-    const message = updatedFields.join(" ,");
+    user.emailList = emailList || [];
 
-    if (message.length === 0) {
-      return res.json({ message: "No Updates Done" });
-    } else {
-      user.save((saveError, savedData) => {
-        if (saveError) return res.status(400).json({ error: saveError });
+    // let message = updatedFields.join(" ,");
 
-        return res.json({
-          updatedData: savedData,
-          message: message + " updated",
-        });
-      });
-    }
+    // if (!message?.length) message += "Profile";
+    // if (message.length === 0) {
+    //   return res.json({ message: "No Updates Done" });
+    // } else {
+    user.save((saveError, savedData) => {
+      if (saveError) return res.status(400).json({ error: saveError });
+
+      return res.json({ updatedData: savedData, message: "Profile updated" });
+    });
+    // }
   });
 };
 

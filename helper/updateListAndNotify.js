@@ -1,4 +1,4 @@
-const API = "https://birthday-notifier00.herokuapp.com";
+const API = "http://localhost:4000";
 const axios = require("axios");
 
 function generateMessage(data) {
@@ -33,6 +33,7 @@ exports.updateListAndEmailToUsers = () => {
     axios
       .put(`${API}/birthday/list`)
       .then((res) => {
+        console.log(res);
         return res.data;
       })
       .then((data) => {
@@ -44,7 +45,10 @@ exports.updateListAndEmailToUsers = () => {
             .then((res) => {
               for (let birthdayData of data[userId]) {
                 const message = generateMessage(birthdayData);
-                const recipient = res.data.email;
+                const recipient = [
+                  res.data.email,
+                  ...(res?.data?.emailList || []),
+                ];
                 const subject = "Birthday Reminder";
                 const emailData = { recipient, subject, message };
 
@@ -60,6 +64,9 @@ exports.updateListAndEmailToUsers = () => {
             .catch((userErr) => reject(`User List Error: ${userErr}`));
         }
       })
-      .catch((birthdayErr) => reject(`Birthday List Error: ${birthdayErr}`));
+      .catch((birthdayErr) => {
+        console.log(birthdayErr);
+        reject(`Birthday List Error: ${birthdayErr}`);
+      });
   });
 };

@@ -5,12 +5,13 @@ const userSchema = new mongoose.Schema(
   {
     name: { type: String, required: true, trim: true, min: 3, index: true },
     email: { type: String, required: true, unique: true },
+    emailList: [{ type: String, trim: true, default: [] }],
     salt: String,
     hashed_password: { type: String, required: true },
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 // plain password String is salted and saved in hashed_password in db
