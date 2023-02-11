@@ -4,13 +4,7 @@ import {
   editBirthday,
   processDataForSubmission,
 } from "../../../actions/birthdayList";
-import {
-  getDateOptions,
-  getFormattedDate,
-  getYearOptions,
-  limit,
-  month,
-} from "../../../helpers/utils";
+import { getDateOptions, getYearOptions, month } from "../../../helpers/utils";
 import InputSection from "../../Inputs/InputSection";
 import "../EditModal.css";
 

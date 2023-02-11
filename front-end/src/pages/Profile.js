@@ -16,7 +16,7 @@ function useManageUserDetails(allEmailLists, setEmails) {
   const [message, setMessage] = useState();
 
   useEffect(() => {
-    setUpdatedData({ ...updatedData, emailList: allEmailLists });
+    setUpdatedData((prev) => ({ ...prev, emailList: allEmailLists }));
   }, [allEmailLists]);
 
   useEffect(() => {
@@ -208,7 +208,7 @@ function useHandleMultiEmail() {
     evt.preventDefault();
 
     var paste = evt.clipboardData.getData("text");
-    var emails = paste.match(/[\w\d\.-]+@[\w\d\.-]+\.[\w\d\.-]+/g);
+    var emails = paste.match(/[\w\d.-]+@[\w\d.-]+\.[\w\d.-]+/g);
 
     if (emails) {
       var toBeAdded = emails.filter((email) => !isInList(email));
@@ -242,7 +242,7 @@ function useHandleMultiEmail() {
   }
 
   function isEmail(email) {
-    return /[\w\d\.-]+@[\w\d\.-]+\.[\w\d\.-]+/.test(email);
+    return /[\w\d.-]+@[\w\d.-]+\.[\w\d.-]+/.test(email);
   }
 
   return {
