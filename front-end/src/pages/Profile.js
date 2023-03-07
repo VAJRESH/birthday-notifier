@@ -6,7 +6,7 @@ import InputSection from "../components/Inputs/InputSection";
 import ToastMessage from "../components/ToastMessage/ToastMessage.component";
 import { getLastNameFromUrl } from "../helpers/utils";
 
-function useManageUserDetails(allEmailLists, setEmails) {
+function useManageUserDetails(allEmailLists, setEmails = () => {}) {
   const [profileDetails, setProfileDetails] = useState({});
   const [updatedData, setUpdatedData] = useState({
     name: "",
@@ -35,7 +35,7 @@ function useManageUserDetails(allEmailLists, setEmails) {
     } else {
       setMessage("You can only see your profile. Please login");
     }
-  }, []);
+  }, [setEmails]);
 
   function handleInput(e) {
     setMessage();
