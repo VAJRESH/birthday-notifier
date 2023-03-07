@@ -1,4 +1,4 @@
-const API = "http://localhost:4000";
+const API = "https://birthday-notifier.onrender.com";
 const axios = require("axios");
 
 function generateMessage(data) {
