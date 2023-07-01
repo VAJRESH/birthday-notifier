@@ -39,7 +39,7 @@ exports.register = (req, res) => {
 
         const birthdayList = new BirthdayList({
           userId: user._id,
-          belongsTo: user.name,
+          belongsTo: user.name?.toLowerCase(),
         });
         birthdayList.save((err, data) => {
           if (err) return res.status(400).json({ error: err });

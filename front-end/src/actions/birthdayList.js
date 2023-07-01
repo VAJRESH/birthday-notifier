@@ -95,3 +95,18 @@ export function updateImage(id, formData, token) {
     })
     .catch((err) => console.log(err));
 }
+
+export function bulkUploadBirthday(formData, token) {
+  return fetch(`${API}/birthday/bulk-upload`, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: formData,
+  })
+    .then((res) => {
+      return res.json();
+    })
+    .catch((err) => console.log(err));
+}

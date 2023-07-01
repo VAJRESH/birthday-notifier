@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { getCookie, update } from "../actions/auth";
+import { bulkUploadBirthday } from "../actions/birthdayList";
 import { getUserDetails } from "../actions/user";
 import InputSection from "../components/Inputs/InputSection";
 import ToastMessage from "../components/ToastMessage/ToastMessage.component";
@@ -18,6 +19,12 @@ function useManageUserDetails(allEmailLists, setEmails = () => {}) {
   useEffect(() => {
     setUpdatedData((prev) => ({ ...prev, emailList: allEmailLists }));
   }, [allEmailLists]);
+
+  useEffect(() => {
+    if (!message) return;
+
+    setTimeout(() => setMessage(null), 1000);
+  }, [message]);
 
   useEffect(() => {
     const name = getLastNameFromUrl();
@@ -74,6 +81,7 @@ function useManageUserDetails(allEmailLists, setEmails = () => {}) {
     handleInput,
     handleSubmit,
     message,
+    setMessage,
     setUpdatedData,
   };
 }
@@ -88,8 +96,14 @@ export default function Profile() {
     handlePaste,
   } = useHandleMultiEmail();
 
-  const { profileDetails, updatedData, handleInput, handleSubmit, message } =
-    useManageUserDetails(emails?.items, setEmails);
+  const {
+    profileDetails,
+    updatedData,
+    handleInput,
+    handleSubmit,
+    message,
+    setMessage,
+  } = useManageUserDetails(emails?.items, setEmails);
 
   return (
     <div className="main-container">
@@ -149,6 +163,33 @@ export default function Profile() {
             />
 
             {emails?.error && <p className="error">{emails?.error}</p>}
+
+            <InputSection
+              label={"Bulk Upload Birthdays"}
+              example="Upload .xlsx file"
+              handleChange={(e) => {
+                if (!e.target.files?.[0]?.name?.includes("xlsx")) {
+                  e.target.value = null;
+                  return setMessage("Upload xlsx file only");
+                }
+
+                const formData = new FormData();
+                formData.set("file", e.target.files?.[0]);
+                bulkUploadBirthday(formData, getCookie("token"))
+                  .then((res) => {
+                    console.log(res);
+                    setMessage(
+                      res?.message || res?.error || "Something went wrong",
+                    );
+                  })
+                  .catch((err) => console.log(err));
+              }}
+              isNotRequired={true}
+              inputType={"file"}
+              inputProps={{
+                className: "input " + (emails?.error && " has-error"),
+              }}
+            />
 
             <div className="form-group">
               <input

@@ -10,12 +10,18 @@ let upload = multer({
     filename: (req, file, cb) => {
       cb(
         null,
-        Date.now() + "-" + file.originalname.toLowerCase().split(" ").join("-")
+        Date.now() + "-" + file.originalname.toLowerCase().split(" ").join("-"),
       );
     },
   }),
   fileFilter: (req, file, cb) => {
-    const allowedFileTypes = ["image/jpeg", "image/jpg", "image/png"];
+    const allowedFileTypes = [
+      "image/jpeg",
+      "image/jpg",
+      "image/png",
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    ];
+
     if (allowedFileTypes.includes(file.mimetype)) {
       cb(null, true);
     } else {
@@ -34,7 +40,8 @@ const {
   editBirthday,
   updateImage,
   deleteBirthday,
-  checkForBirthdays
+  checkForBirthdays,
+  bulkUpload,
 } = require("../controllers/birthday.controller");
 const { requireLogin } = require("../controllers/auth.controller.js");
 
@@ -51,14 +58,15 @@ router.post(
   upload.single("image"),
   validateDetails,
   requireLogin,
-  addNewBirthday
+  addNewBirthday,
 );
 router.put(
   "/image/update/:id",
   upload.single("image"),
   requireLogin,
-  updateImage
+  updateImage,
 );
+router.post("/bulk-upload", upload.single("file"), requireLogin, bulkUpload);
 router.get("/updateList", checkForBirthdays);
 
 module.exports = router;

@@ -4,6 +4,7 @@ const cloudinary = require("cloudinary");
 const { Birthday, BirthdayList } = require("../models/birthday.model");
 const { getFormattedDate, isBirthdayToday } = require("../helper/controllers");
 const { updateListAndEmailToUsers } = require("../helper/updateListAndNotify");
+const XLSX = require("xlsx");
 
 require("dotenv").config({ path: path.join(__dirname, "..", ".env") });
 
@@ -16,7 +17,7 @@ cloudinary.config({
 exports.getUserBirthdayList = (req, res) => {
   const name = req.params.user;
 
-  BirthdayList.findOne({ belongsTo: name }).exec((err, list) => {
+  BirthdayList.findOne({ belongsTo: name?.toLowerCase() }).exec((err, list) => {
     if (err) return res.status(400).json({ error: err });
 
     return res.json(list);
@@ -53,7 +54,6 @@ exports.addNewBirthday = (req, res) => {
   const userId = req.user._id;
   const { name, gender, date, month, year, isBirthday } = req.body;
   let image, cloudinary_id;
-  console.log(req.file);
 
   BirthdayList.findOne({ userId }).exec(async (err, list) => {
     if (err) return res.status(400).json({ error: err });
@@ -65,7 +65,7 @@ exports.addNewBirthday = (req, res) => {
     } else {
       const results = await cloudinary.uploader
         .upload(req.file.path)
-        .catch((err) => console.log(error, err));
+        .catch((err) => console.log("Error", err));
 
       await fs.unlink(req.file.path, (err) => {
         if (err) return console.error(err);
@@ -115,7 +115,6 @@ exports.editBirthday = (req, res) => {
     list
       .save()
       .then((data) => {
-        console.log(data);
         res.json({ message: `${birthdayItem.name}'s birthday updated` });
       })
       .catch((err) => {
@@ -185,4 +184,47 @@ exports.checkForBirthdays = (req, res) => {
       return res.json({ message: msg });
     })
     .catch((err) => res.json({ error: err }));
+};
+
+exports.bulkUpload = (req, res) => {
+  const userId = req.user._id;
+
+  if (!req.file) return res.status(400).json({ error: "No file uploaded" });
+
+  BirthdayList.findOne({ userId }).exec(async (err, list) => {
+    if (err) return res.status(400).json({ error: err });
+
+    const workbook = XLSX.readFile(req.file.path);
+    const sheetNameList = workbook.SheetNames;
+
+    const birthdayArr = XLSX.utils.sheet_to_json(
+      workbook.Sheets[sheetNameList[0]],
+    );
+
+    birthdayArr?.forEach((bd) => {
+      const data = {
+        name: bd?.Name,
+        gender: bd?.Gender?.toLowerCase()?.includes("f") ? "Female" : "Male",
+        date: bd?.["Date"],
+        month: bd?.Month - 1,
+        year: bd?.Year,
+        isBirthday: false,
+        image: "/images/default-avatar.jpg",
+      };
+      if (!data?.name) return;
+
+      const newBirthday = new Birthday(data);
+      list.birthdays.push(newBirthday);
+    });
+
+    await fs.unlink(req.file.path, (err) => {
+      if (err) return console.error(err);
+    });
+
+    list.save((err, data) => {
+      if (err) return res.status(400).json({ error: "Something went wrong" });
+
+      return res.json({ message: `Birthdays added` });
+    });
+  });
 };

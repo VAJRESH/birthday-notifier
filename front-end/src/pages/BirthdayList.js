@@ -87,7 +87,7 @@ function useHandleActions() {
 
   function handleDelete(birthday) {
     const confirmDelete = window.confirm(
-      `Are you sure you want to delete ${birthday.name}'s birthday`
+      `Are you sure you want to delete ${birthday.name}'s birthday`,
     );
     if (confirmDelete) {
       deleteBirthday(birthday._id, getCookie("token")).then((res) => {
