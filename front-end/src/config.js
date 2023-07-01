@@ -3,5 +3,5 @@ module.exports = {
   DEV_BACKEND_URL: "http://localhost:4000",
   DEV_FRONTEND_URL: "http://localhost:3000",
   URL: "https://birthday-notifier.onrender.com",
-  ENV: "DEVELOPMENT",
+  ENV: "PRODUCTION",
 };
